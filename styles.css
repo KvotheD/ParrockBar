@@ -16,6 +16,7 @@
     --gray: #cac3c3;
     --light-gray: #f8f9fa;
     --dark-gray: #333333;
+    --medium-brown: #332E21;
     
     --font-primary: 'Roboto', sans-serif;
     --font-display: 'Rock Salt', cursive;
@@ -63,7 +64,7 @@ section {
 }
 
 .navbar {
-    padding: 1rem 0;
+    padding: 2rem 0;
 }
 
 .nav-container {
@@ -149,8 +150,8 @@ section {
 }
 
 .header-logo-img {
-    width: 50px;
-    height: 50px;
+    width: 70px;
+    height: 70px;
     border-radius: 50%;
     border: 2px solid var(--gold);
     object-fit: cover;
@@ -1150,6 +1151,8 @@ section {
     
     .nav-menu.active {
         left: 0;
+        top: 4rem;
+        background-color: var(--medium-gray);
     }
     
     .nav-menu li {
@@ -1288,11 +1291,6 @@ section {
     transform: translateY(-2px);
 }
 
-/* Os menus agora usam a mesma classe .nav-menu do menu principal */
-
-/* Hambúrguer comum - agora usa a classe padrão .hamburger */
-
-/* ===== CARDÁPIO PAGE STYLES ===== */
 .menu-page {
     padding-top: 100px;
     min-height: 100vh;
@@ -1520,6 +1518,8 @@ section {
     
     .nav-menu.active {
         left: 0;
+        top: 4rem;
+        background-color: var(--medium-brown);
     }
     
     .hamburger.active span:nth-child(2) {
