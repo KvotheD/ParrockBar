@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Parrock Rock'n Parrilla</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rock+Salt&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <a href="index.html" class="back-to-site">
+        <i class="fas fa-arrow-left"></i> Voltar ao Site
+    </a>
+
+    <!-- Login Form -->
+    <div class="admin-container" id="loginContainer">
+        <div class="login-form">
+            <h1>Admin Parrock</h1>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Usuário:</label>
+                    <input type="text" id="username" placeholder="Digite seu usuário" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Senha:</label>
+                    <input type="password" id="password" placeholder="Digite sua senha" required>
+                </div>
+                <button type="submit" class="login-btn">Entrar</button>
+                <div id="errorMessage" class="error-message"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div class="admin-dashboard" id="adminDashboard">
+        <div class="admin-header">
+            <h1>Painel Administrativo</h1>
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Sair
+            </button>
+        </div>
+
+        <div class="admin-sections">
+            <!-- Promotions Management -->
+            <div class="admin-section">
+                <h2>Gerenciar Promoções</h2>
+                <form id="adminPromotionsForm" class="item-form">
+                    <div class="form-group">
+                        <input type="text" id="adminPromoName" placeholder="Nome da promoção" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="adminPromoPrice" placeholder="Preço (ex: R$ 45,00)" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea id="adminPromoDescription" placeholder="Descrição da promoção" rows="3" required></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="adminPromoValidity">Válido até:</label>
+                            <input type="date" id="adminPromoValidity" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="adminPromoBadge">Badge (opcional):</label>
+                            <input type="text" id="adminPromoBadge" placeholder="ex: 50% OFF">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="adminPromoFeatured"> Destacar na página principal
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="adminPromoImage">Imagem da promoção:</label>
+                        <input type="file" id="adminPromoImage" accept="image/*">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Adicionar Promoção</button>
+                </form>
+                
+                <div class="admin-promotions-list" id="adminPromotionsList">
+                    <!-- Promotions will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Menu Management -->
+            <div class="admin-section">
+                <h2>Gerenciar Cardápio</h2>
+                <form id="adminMenuForm" class="item-form">
+                    <div class="form-group">
+                        <input type="text" id="adminMenuName" placeholder="Nome do prato" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="adminMenuPrice" placeholder="Preço (ex: R$ 45,00)" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea id="adminMenuDescription" placeholder="Descrição do prato" rows="3" required></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="adminMenuCategory">Categoria:</label>
+                            <select id="adminMenuCategory" required>
+                                <option value="">Selecione uma categoria</option>
+                                <option value="entradas">Entradas</option>
+                                <option value="menu executivo">Menu Executivo</option>
+                                <option value="carnes">Carnes</option>
+                                <option value="acompanhamentos">Acompanhamentos</option>
+                                <option value="porcoes">Porções</option>
+                                <option value="burguers">Burguers</option>
+                                <option value="sobremesas">Sobremesas</option>
+                                <option value="chopp 370ml">Chopp 370ml</option>
+                                <option value="cervejas long neck">Cervejas Long Neck</option>
+                                <option value="cervejas 600ml">Cervejas 600ml</option>
+                                <option value="bebidas">Bebidas</option>
+                                <option value="drinks">Drinks</option>
+                                <option value="drinks autorais">Drinks Autorais</option>
+                                <option value="doses">Doses</option>
+                                <option value="vinhos">Vinhos</option>
+                                <option value="convite">Convite</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="adminMenuTags">Tags (separadas por vírgula):</label>
+                            <input type="text" id="adminMenuTags" placeholder="ex: Picante, Vegetariano">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="adminMenuFeatured"> Destacar no cardápio
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="adminMenuImage">Imagem do prato:</label>
+                        <input type="file" id="adminMenuImage" accept="image/*">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Adicionar ao Cardápio</button>
+                </form>
+                
+                <div class="admin-menu-items" id="adminMenuItems">
+                    <!-- Menu items will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Shows Management -->
+            <div class="admin-section">
+                <h2>Gerenciar Shows</h2>
+                <form id="adminShowsForm" class="item-form">
+                    <div class="form-group">
+                        <input type="text" id="adminShowName" placeholder="Nome do show/artista" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <input type="date" id="adminShowDate" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="time" id="adminShowTime" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="adminShowPrice" placeholder="Preço do ingresso (ex: R$ 30,00)">
+                    </div>
+                    <div class="form-group">
+                        <textarea id="adminShowDescription" placeholder="Descrição do evento" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="adminShowFeatured"> Destacar na página principal
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="adminShowImage">Imagem do evento:</label>
+                        <input type="file" id="adminShowImage" accept="image/*">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Adicionar à Agenda</button>
+                </form>
+                
+                <div class="admin-shows-list" id="adminShowsList">
+                    <!-- Shows will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Admin credentials (in a real app, this would be server-side)
+        const ADMIN_CREDENTIALS = {
+            username: 'admin',
+            password: 'parrock2024'
+        };
+
+        // Check if user is already logged in
+        if (localStorage.getItem('parrockAdminLoggedIn') === 'true') {
+            showDashboard();
+        }
+
+        // Login form handling
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
+            
+            if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
+                localStorage.setItem('parrockAdminLoggedIn', 'true');
+                showDashboard();
+            } else {
+                errorMessage.textContent = 'Usuário ou senha incorretos!';
+                errorMessage.style.display = 'block';
+            }
+        });
+
+        function showDashboard() {
+            document.getElementById('loginContainer').style.display = 'none';
+            document.getElementById('adminDashboard').style.display = 'block';
+            
+            // Initialize admin managers
+            new AdminMenuManager();
+            new AdminShowsManager();
+        }
+
+        function logout() {
+            localStorage.removeItem('parrockAdminLoggedIn');
+            document.getElementById('loginContainer').style.display = 'flex';
+            document.getElementById('adminDashboard').style.display = 'none';
+            document.getElementById('loginForm').reset();
+            document.getElementById('errorMessage').style.display = 'none';
+        }
+
+        // Admin Menu Manager
+        class AdminMenuManager {
+            constructor() {
+                this.menuItems = JSON.parse(localStorage.getItem('parrockMenu')) || [];
+                this.init();
+            }
+
+            init() {
+                this.renderMenu();
+                this.bindEvents();
+            }
+
+            bindEvents() {
+                const form = document.getElementById('adminMenuForm');
+                if (form) {
+                    form.addEventListener('submit', (e) => this.handleSubmit(e));
+                }
+            }
+
+            handleSubmit(e) {
+                e.preventDefault();
+                
+                const name = document.getElementById('adminMenuName').value;
+                const price = document.getElementById('adminMenuPrice').value;
+                const description = document.getElementById('adminMenuDescription').value;
+                const category = document.getElementById('adminMenuCategory').value;
+                const tags = document.getElementById('adminMenuTags').value;
+                const featured = document.getElementById('adminMenuFeatured').checked;
+                const imageFile = document.getElementById('adminMenuImage').files[0];
+
+                const menuItem = {
+                    id: Date.now(),
+                    name,
+                    price,
+                    description,
+                    category,
+                    tags: tags ? tags.split(',').map(tag => tag.trim()) : [],
+                    featured,
+                    image: null
+                };
+
+                if (imageFile) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        menuItem.image = event.target.result;
+                        this.addMenuItem(menuItem);
+                    };
+                    reader.readAsDataURL(imageFile);
+                } else {
+                    this.addMenuItem(menuItem);
+                }
+            }
+
+            addMenuItem(item) {
+                this.menuItems.push(item);
+                localStorage.setItem('parrockMenu', JSON.stringify(this.menuItems));
+                this.renderMenu();
+                document.getElementById('adminMenuForm').reset();
+                alert('Item adicionado ao cardápio com sucesso!');
+            }
+
+            deleteMenuItem(id) {
+                if (confirm('Tem certeza que deseja remover este item?')) {
+                    this.menuItems = this.menuItems.filter(item => item.id !== id);
+                    localStorage.setItem('parrockMenu', JSON.stringify(this.menuItems));
+                    this.renderMenu();
+                }
+            }
+
+            renderMenu() {
+                const container = document.getElementById('adminMenuItems');
+                if (!container) return;
+
+                if (this.menuItems.length === 0) {
+                    container.innerHTML = '<p style="color: var(--gray); text-align: center;">Nenhum item no cardápio.</p>';
+                    return;
+                }
+
+                container.innerHTML = this.menuItems.map(item => `
+                    <div class="menu-item" style="background: var(--primary-black); padding: 1rem; border-radius: 10px; margin: 1rem 0; border: 1px solid var(--gold);">
+                        ${item.image ? `<img src="${item.image}" alt="${item.name}" style="width: 100%; height: 150px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;">` : ''}
+                        <h4 style="color: var(--gold); margin-bottom: 0.5rem;">${item.name}</h4>
+                        <p style="color: var(--pink); font-weight: 700; margin-bottom: 0.5rem;">${item.price}</p>
+                        <p style="color: var(--white); margin-bottom: 1rem;">${item.description}</p>
+                        <button onclick="adminMenuManager.deleteMenuItem(${item.id})" class="btn btn-small btn-delete" style="background: var(--pink); color: var(--white); border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer;">Remover</button>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Admin Shows Manager
+        class AdminShowsManager {
+            constructor() {
+                this.shows = JSON.parse(localStorage.getItem('parrockShows')) || [];
+                this.init();
+            }
+
+            init() {
+                this.renderShows();
+                this.bindEvents();
+            }
+
+            bindEvents() {
+                const form = document.getElementById('adminShowsForm');
+                if (form) {
+                    form.addEventListener('submit', (e) => this.handleSubmit(e));
+                }
+            }
+
+            handleSubmit(e) {
+                e.preventDefault();
+                
+                const name = document.getElementById('adminShowName').value;
+                const date = document.getElementById('adminShowDate').value;
+                const time = document.getElementById('adminShowTime').value;
+                const price = document.getElementById('adminShowPrice').value;
+                const description = document.getElementById('adminShowDescription').value;
+                const featured = document.getElementById('adminShowFeatured').checked;
+                const imageFile = document.getElementById('adminShowImage').files[0];
+
+                const show = {
+                    id: Date.now(),
+                    name,
+                    date,
+                    time,
+                    price: price || 'Entrada gratuita',
+                    description,
+                    featured,
+                    image: null
+                };
+
+                if (imageFile) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        show.image = event.target.result;
+                        this.addShow(show);
+                    };
+                    reader.readAsDataURL(imageFile);
+                } else {
+                    this.addShow(show);
+                }
+            }
+
+            addShow(show) {
+                this.shows.push(show);
+                localStorage.setItem('parrockShows', JSON.stringify(this.shows));
+                this.renderShows();
+                document.getElementById('adminShowsForm').reset();
+                alert('Show adicionado à agenda com sucesso!');
+            }
+
+            deleteShow(id) {
+                if (confirm('Tem certeza que deseja remover este show?')) {
+                    this.shows = this.shows.filter(show => show.id !== id);
+                    localStorage.setItem('parrockShows', JSON.stringify(this.shows));
+                    this.renderShows();
+                }
+            }
+
+            renderShows() {
+                const container = document.getElementById('adminShowsList');
+                if (!container) return;
+
+                if (this.shows.length === 0) {
+                    container.innerHTML = '<p style="color: var(--gray); text-align: center;">Nenhum show agendado.</p>';
+                    return;
+                }
+
+                const sortedShows = this.shows.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+                container.innerHTML = sortedShows.map(show => `
+                    <div class="show-item" style="background: var(--primary-black); padding: 1rem; border-radius: 10px; margin: 1rem 0; border: 1px solid var(--gold);">
+                        ${show.image ? `<img src="${show.image}" alt="${show.name}" style="width: 100%; height: 150px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;">` : ''}
+                        <h4 style="color: var(--gold); margin-bottom: 0.5rem;">${show.name}</h4>
+                        <p style="color: var(--pink); font-weight: 700; margin-bottom: 0.5rem;">${this.formatDate(show.date)} - ${show.time}</p>
+                        <p style="color: var(--yellow); font-weight: 700; margin-bottom: 0.5rem;">${show.price}</p>
+                        <p style="color: var(--white); margin-bottom: 1rem;">${show.description}</p>
+                        <button onclick="adminShowsManager.deleteShow(${show.id})" class="btn btn-small btn-delete" style="background: var(--pink); color: var(--white); border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer;">Remover</button>
+                    </div>
+                `).join('');
+            }
+
+            formatDate(dateString) {
+                const date = new Date(dateString);
+                return date.toLocaleDateString('pt-BR', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
+                });
+            }
+        }
+
+        // Make managers globally available
+        let adminMenuManager, adminShowsManager;
+        
+        // Admin Promotions Manager
+        class AdminPromotionsManager {
+            constructor() {
+                this.promotions = JSON.parse(localStorage.getItem('parrockPromotions')) || [];
+                this.init();
+            }
+
+            init() {
+                this.renderPromotions();
+                this.bindEvents();
+            }
+
+            bindEvents() {
+                const form = document.getElementById('adminPromotionsForm');
+                if (form) {
+                    form.addEventListener('submit', (e) => this.handleSubmit(e));
+                }
+            }
+
+            handleSubmit(e) {
+                e.preventDefault();
+                
+                const name = document.getElementById('adminPromoName').value;
+                const price = document.getElementById('adminPromoPrice').value;
+                const description = document.getElementById('adminPromoDescription').value;
+                const validity = document.getElementById('adminPromoValidity').value;
+                const badge = document.getElementById('adminPromoBadge').value;
+                const featured = document.getElementById('adminPromoFeatured').checked;
+                const imageFile = document.getElementById('adminPromoImage').files[0];
+
+                const promotion = {
+                    id: Date.now(),
+                    name,
+                    price,
+                    description,
+                    validity,
+                    badge,
+                    featured,
+                    image: null
+                };
+
+                if (imageFile) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        promotion.image = event.target.result;
+                        this.addPromotion(promotion);
+                    };
+                    reader.readAsDataURL(imageFile);
+                } else {
+                    this.addPromotion(promotion);
+                }
+            }
+
+            addPromotion(promo) {
+                this.promotions.push(promo);
+                localStorage.setItem('parrockPromotions', JSON.stringify(this.promotions));
+                this.renderPromotions();
+                document.getElementById('adminPromotionsForm').reset();
+                alert('Promoção adicionada com sucesso!');
+            }
+
+            deletePromotion(id) {
+                if (confirm('Tem certeza que deseja remover esta promoção?')) {
+                    this.promotions = this.promotions.filter(promo => promo.id !== id);
+                    localStorage.setItem('parrockPromotions', JSON.stringify(this.promotions));
+                    this.renderPromotions();
+                }
+            }
+
+            renderPromotions() {
+                const container = document.getElementById('adminPromotionsList');
+                if (!container) return;
+
+                if (this.promotions.length === 0) {
+                    container.innerHTML = '<p style="color: var(--gray); text-align: center;">Nenhuma promoção cadastrada.</p>';
+                    return;
+                }
+
+                container.innerHTML = this.promotions.map(promo => `
+                    <div class="promotion-item" style="background: var(--primary-black); padding: 1rem; border-radius: 10px; margin: 1rem 0; border: 1px solid var(--gold);">
+                        ${promo.image ? `<img src="${promo.image}" alt="${promo.name}" style="width: 100%; height: 150px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;">` : ''}
+                        <h4 style="color: var(--gold); margin-bottom: 0.5rem;">${promo.name}</h4>
+                        <p style="color: var(--pink); font-weight: 700; margin-bottom: 0.5rem;">${promo.price}</p>
+                        <p style="color: var(--white); margin-bottom: 0.5rem;">${promo.description}</p>
+                        <p style="color: var(--gray); margin-bottom: 0.5rem;">Válido até: ${this.formatDate(promo.validity)}</p>
+                        ${promo.featured ? '<span style="background: var(--pink); color: var(--white); padding: 2px 8px; border-radius: 10px; font-size: 0.8rem;">DESTAQUE</span>' : ''}
+                        <button onclick="adminPromotionsManager.deletePromotion(${promo.id})" class="btn btn-small btn-delete" style="background: var(--pink); color: var(--white); border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; margin-top: 1rem;">Remover</button>
+                    </div>
+                `).join('');
+            }
+
+            formatDate(dateString) {
+                const date = new Date(dateString);
+                return date.toLocaleDateString('pt-BR', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
+                });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem('parrockAdminLoggedIn') === 'true') {
+                adminPromotionsManager = new AdminPromotionsManager();
+                adminMenuManager = new AdminMenuManager();
+                adminShowsManager = new AdminShowsManager();
+            }
+        });
+    </script>
+</body>
+</html>

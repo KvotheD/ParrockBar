@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categoria - Parrock Rock'n Parrilla</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rock+Salt&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Category Navigation -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="header-logo-left">
+                    <a href="index.html" class="header-logo-link">
+                        <img src="imagens/profile_parrocknparrilla.webp" alt="Parrock Logo" class="header-logo-img">
+                    </a>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Início</a></li>
+                    <li><a href="index.html#about">Sobre</a></li>
+                    <li><a href="index.html#services">Serviços</a></li>
+                    <li><a href="index.html#gallery">Ambiente</a></li>
+                    <li><a href="index.html#promotions">Promoções</a></li>
+                    <li><a href="cardapio.html">Cardápio</a></li>
+                    <li><a href="index.html#shows">Shows</a></li>
+                    <li><a href="index.html#contact">Contato</a></li>
+                </ul>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+    
+    <!-- Botão de voltar para mobile -->
+    <a href="cardapio.html" class="back-to-menu-mobile">
+        <i class="fas fa-arrow-left"></i> Voltar ao Cardápio
+    </a>
+
+    <div class="category-page">
+        <div class="category-header">
+            <div class="container">
+                <h1 id="categoryTitle">Categoria</h1>
+                <p id="categoryDescription">Produtos desta categoria</p>
+            </div>
+        </div>
+
+        <div class="category-content">
+            <div class="container">
+                <div class="menu-grid" id="categoryItems">
+                    <!-- Itens da categoria serão carregados aqui -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class CategoryPageManager {
+            constructor() {
+                this.category = this.getCategoryFromURL();
+                this.menuItems = JSON.parse(localStorage.getItem('parrockMenu')) || [];
+                this.init();
+            }
+
+            getCategoryFromURL() {
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get('cat') || 'entradas';
+            }
+
+            init() {
+                this.updatePageTitle();
+                this.renderCategoryItems();
+            }
+
+            updatePageTitle() {
+                const categoryNames = {
+                    'entradas': 'Entradas',
+                    'menu-executivo': 'Menu Executivo',
+                    'carnes': 'Carnes',
+                    'acompanhamentos': 'Acompanhamentos',
+                    'porcoes': 'Porções',
+                    'burguers': 'Burguers',
+                    'sobremesas': 'Sobremesas',
+                    'chopp-370ml': 'Chopp 370ml',
+                    'cervejas-long-neck': 'Cervejas Long Neck',
+                    'cervejas-600ml': 'Cervejas 600ml',
+                    'bebidas': 'Bebidas',
+                    'drinks': 'Drinks',
+                    'drinks-autorais': 'Drinks Autorais',
+                    'doses': 'Doses',
+                    'vinhos': 'Vinhos',
+                    'convite': 'Convite'
+                };
+
+                const categoryDescriptions = {
+                    'entradas': 'Aperitivos e petiscos para começar bem',
+                    'menu-executivo': 'Pratos executivos com preço especial',
+                    'carnes': 'Carnes nobres da parrilla',
+                    'acompanhamentos': 'Acompanhamentos para seus pratos',
+                    'porcoes': 'Porções generosas para compartilhar',
+                    'burguers': 'Hambúrgueres artesanais',
+                    'sobremesas': 'Doces para finalizar com chave de ouro',
+                    'chopp-370ml': 'Chopp gelado da torneira',
+                    'cervejas-long-neck': 'Cervejas long neck geladas',
+                    'cervejas-600ml': 'Cervejas 600ml geladas',
+                    'bebidas': 'Refrigerantes e bebidas não alcoólicas',
+                    'drinks': 'Coquetéis clássicos',
+                    'drinks-autorais': 'Drinks exclusivos da casa',
+                    'doses': 'Destilados e shots',
+                    'vinhos': 'Vinhos selecionados',
+                    'convite': 'Convites e eventos especiais'
+                };
+
+                document.getElementById('categoryTitle').textContent = categoryNames[this.category] || 'Categoria';
+                document.getElementById('categoryDescription').textContent = categoryDescriptions[this.category] || 'Produtos desta categoria';
+                document.title = `${categoryNames[this.category] || 'Categoria'} - Parrock Rock'n Parrilla`;
+            }
+
+            renderCategoryItems() {
+                const container = document.getElementById('categoryItems');
+                if (!container) return;
+
+                // Filtrar itens da categoria
+                const categoryItems = this.menuItems.filter(item => {
+                    if (!item.category) return false;
+                    const itemCategory = item.category.toLowerCase().replace(/\s+/g, '-');
+                    return itemCategory === this.category;
+                });
+
+                if (categoryItems.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-category">
+                            <i class="fas fa-utensils" style="font-size: 3rem; margin-bottom: 1rem; color: var(--gold);"></i>
+                            <h3 style="color: var(--gold); margin-bottom: 1rem;">Nenhum item disponível</h3>
+                            <p>Esta categoria ainda não possui itens cadastrados.</p>
+                            <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--gray);">
+                                <i class="fas fa-info-circle"></i> 
+                                Os itens são adicionados através do painel administrativo.
+                            </p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = categoryItems.map(item => `
+                    <div class="menu-item-card ${item.featured ? 'featured' : ''}">
+                        ${item.image ? `<img src="${item.image}" alt="${item.name}" class="menu-item-image">` : ''}
+                        <div class="menu-item-content">
+                            <div class="menu-item-header">
+                                <h3 class="menu-item-name">${item.name}</h3>
+                                <span class="menu-item-price">${item.price}</span>
+                            </div>
+                            <p class="menu-item-description">${item.description}</p>
+                            ${item.tags && item.tags.length > 0 ? `
+                            <div class="menu-item-tags">
+                                ${item.tags.map(tag => `<span class="menu-tag">${tag}</span>`).join('')}
+                            </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new CategoryPageManager();
+        });
+    </script>
+    
+    <script src="script.js"></script>
+</body>
+</html>
