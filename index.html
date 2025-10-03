@@ -48,8 +48,8 @@
                     <img src="imagens/profile_parrocknparrilla.webp" alt="Parrock Rock'n Parrilla Logo" class="hero-logo-img">
                 </div>
             </div>
-            <h2 class="hero-subtitle">O ponto de encontro dos apaixonados por rock e da cultura da carne na parrilla</h2>
-            <p class="hero-description">Desde de 2019 entregando experiências únicas</p>
+            <h2 class="hero-subtitle" id="hero-title">O ponto de encontro dos apaixonados por rock e da cultura da carne na parrilla</h2>
+            <p class="hero-description" id="hero-description">Desde de 2019 entregando experiências únicas</p>
             <div class="hero-buttons">
                 <a href="#contact" class="btn btn-primary">Reservar Mesa</a>
                 <a href="#services" class="btn btn-secondary">Nossos Serviços</a>
@@ -66,12 +66,12 @@
     <section id="about" class="about">
         <div class="container">
             <div class="section-header">
-                <h2>Sobre o Parrock</h2>
+                <h2 id="about-title">Sobre o Parrock</h2>
                 <p>Uma experiência única em Campo Grande</p>
             </div>
             <div class="about-content">
                 <div class="about-text">
-                    <p>Desde 2019, o Parrock Rock'n Parrilla tem sido o ponto de encontro dos apaixonados por rock e da cultura da carne na parrilla em Campo Grande/MS. Com uma atmosfera única, oferecemos uma experiência completa para eventos sociais e corporativos, aniversários, coquetéis, casamentos, confraternizações e muito mais.</p>
+                    <p id="about-text">Desde 2019, o Parrock Rock'n Parrilla tem sido o ponto de encontro dos apaixonados por rock e da cultura da carne na parrilla em Campo Grande/MS. Com uma atmosfera única, oferecemos uma experiência completa para eventos sociais e corporativos, aniversários, coquetéis, casamentos, confraternizações e muito mais.</p>
                     <p>Venha se juntar a nós e aproveite momentos memoráveis no Parrock Rock'n Parrilla!</p>
                     <div class="about-features">
                         <div class="feature">
@@ -102,8 +102,8 @@
     <section id="services" class="services">
         <div class="container">
             <div class="section-header">
-                <h2>Nossos Serviços</h2>
-                <p>Experiências completas para todas as ocasiões</p>
+                <h2 id="services-title">Nossos Serviços</h2>
+                <p id="services-description">Experiências completas para todas as ocasiões</p>
             </div>
             <div class="services-grid">
                 <div class="service-card">
@@ -209,8 +209,8 @@
     <section id="contact" class="contact">
         <div class="container">
             <div class="section-header">
-                <h2>Entre em Contato</h2>
-                <p>Reserve sua mesa ou solicite um orçamento</p>
+                <h2 id="contact-title">Entre em Contato</h2>
+                <p id="contact-description">Reserve sua mesa ou solicite um orçamento</p>
             </div>
             <div class="contact-content">
                 <div class="contact-info">
@@ -220,7 +220,7 @@
                         </div>
                         <div class="contact-details">
                             <h3>Endereço</h3>
-                            <p>Rua Euclides da Cunha, 423<br>Centro, Campo Grande/MS</p>
+                            <p id="contact-address">Rua Euclides da Cunha, 423<br>Centro, Campo Grande/MS</p>
                         </div>
                     </div>
                     <div class="contact-item">
@@ -229,7 +229,7 @@
                         </div>
                         <div class="contact-details">
                             <h3>Telefone</h3>
-                            <p>(67) 99999-9999</p>
+                            <p id="contact-phone">(67) 99999-9999</p>
                         </div>
                     </div>
                     <div class="contact-item">
@@ -238,7 +238,7 @@
                         </div>
                         <div class="contact-details">
                             <h3>E-mail</h3>
-                            <p>contato@parrock.com.br</p>
+                            <p id="contact-email">contato@parrock.com.br</p>
                         </div>
                     </div>
                     <div class="social-links">
@@ -295,7 +295,7 @@
                     </div>
                 </div>
                 <div class="footer-info">
-                    <p>&copy; 2024 Parrock Rock'n Parrilla. Todos os direitos reservados.</p>
+                    <p>&copy; 2025 Parrock Rock'n Parrilla. Todos os direitos reservados.</p>
                     <p>Rua Euclides da Cunha, 423 - Centro, Campo Grande/MS</p>
                 </div>
             </div>
@@ -303,5 +303,68 @@
     </footer>
 
     <script src="script.js"></script>
+    
+    <!-- Script para aplicar conteúdo personalizado -->
+    <script>
+        // Aplicar conteúdo personalizado do localStorage
+        function applyCustomContent() {
+            const customContent = JSON.parse(localStorage.getItem('siteContent') || '[]');
+            
+            customContent.forEach(item => {
+                switch(item.section) {
+                    case 'hero':
+                        if (item.title && document.getElementById('hero-title')) {
+                            document.getElementById('hero-title').textContent = item.title;
+                        }
+                        if (item.text && document.getElementById('hero-description')) {
+                            document.getElementById('hero-description').textContent = item.text;
+                        }
+                        break;
+                    case 'about':
+                        if (item.title && document.getElementById('about-title')) {
+                            document.getElementById('about-title').textContent = item.title;
+                        }
+                        if (item.text && document.getElementById('about-text')) {
+                            document.getElementById('about-text').textContent = item.text;
+                        }
+                        break;
+                    case 'services':
+                        if (item.title && document.getElementById('services-title')) {
+                            document.getElementById('services-title').textContent = item.title;
+                        }
+                        if (item.text && document.getElementById('services-description')) {
+                            document.getElementById('services-description').textContent = item.text;
+                        }
+                        break;
+                    case 'contact':
+                        if (item.title && document.getElementById('contact-title')) {
+                            document.getElementById('contact-title').textContent = item.title;
+                        }
+                        if (item.text && document.getElementById('contact-description')) {
+                            document.getElementById('contact-description').textContent = item.text;
+                        }
+                        // Aplicar dados de contato específicos
+                        if (item.contactData) {
+                            if (item.contactData.address && document.getElementById('contact-address')) {
+                                document.getElementById('contact-address').innerHTML = item.contactData.address.replace(/\n/g, '<br>');
+                            }
+                            if (item.contactData.phone && document.getElementById('contact-phone')) {
+                                document.getElementById('contact-phone').textContent = item.contactData.phone;
+                            }
+                            if (item.contactData.email && document.getElementById('contact-email')) {
+                                document.getElementById('contact-email').textContent = item.contactData.email;
+                            }
+                        }
+                        break;
+                }
+            });
+        }
+
+        // Aplicar quando a página carregar
+        document.addEventListener('DOMContentLoaded', applyCustomContent);
+        
+        // Aplicar quando houver mudanças no localStorage (para atualizações em tempo real)
+        window.addEventListener('storage', applyCustomContent);
+    </script>
 </body>
 </html>

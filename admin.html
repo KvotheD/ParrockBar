@@ -3,531 +3,1814 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Parrock Rock'n Parrilla</title>
+    <title>Painel Administrativo - Parrock Rock'n Parrilla</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Rock+Salt&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <a href="index.html" class="back-to-site">
-        <i class="fas fa-arrow-left"></i> Voltar ao Site
-    </a>
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <div class="admin-sidebar">
+            <div class="sidebar-header">
+                <h2>🎸 Parrock Admin</h2>
+                <p>Painel de Controle</p>
+            </div>
+            
+            <div class="sidebar-nav">
+                <a href="#" class="nav-item active" data-tab="dashboard">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-text">Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="shows">
+                    <span class="nav-icon">🎵</span>
+                    <span class="nav-text">Shows</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="menu">
+                    <span class="nav-icon">🍽️</span>
+                    <span class="nav-text">Cardápio</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="promotions">
+                    <span class="nav-icon">🎯</span>
+                    <span class="nav-text">Promoções</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="images">
+                    <span class="nav-icon">🖼️</span>
+                    <span class="nav-text">Imagens</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="content">
+                    <span class="nav-icon">📝</span>
+                    <span class="nav-text">Conteúdo</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="settings">
+                    <span class="nav-icon">⚙️</span>
+                    <span class="nav-text">Configurações</span>
+                </a>
+            </div>
+            
+            <div class="sidebar-footer">
+                <a href="index.html" class="btn-back">🏠 Voltar ao Site</a>
+                <button class="btn-logout" onclick="logout()">🚪 Sair</button>
+            </div>
+        </div>
 
-    <!-- Login Form -->
-    <div class="admin-container" id="loginContainer">
-        <div class="login-form">
-            <h1>Admin Parrock</h1>
-            <form id="loginForm">
-                <div class="form-group">
-                    <label for="username">Usuário:</label>
-                    <input type="text" id="username" placeholder="Digite seu usuário" required>
+        <!-- Main Content -->
+        <div class="admin-main">
+            <div class="admin-header">
+                <h1>Painel Administrativo</h1>
+                <p>Gerencie todo o conteúdo do site Parrock Rock'n Parrilla</p>
+            </div>
+
+            <div class="admin-content">
+                <!-- Dashboard Tab -->
+                <div id="dashboard" class="tab-content active">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">🎵</div>
+                            <div class="stat-info">
+                                <h3 id="totalShows">0</h3>
+                                <p>Shows Cadastrados</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🍽️</div>
+                            <div class="stat-info">
+                                <h3 id="totalMenuItems">0</h3>
+                                <p>Itens do Cardápio</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🎯</div>
+                            <div class="stat-info">
+                                <h3 id="totalPromotions">0</h3>
+                                <p>Promoções Ativas</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🖼️</div>
+                            <div class="stat-info">
+                                <h3 id="totalImages">0</h3>
+                                <p>Imagens Cadastradas</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-welcome">
+                        <h2>Bem-vindo ao Painel Administrativo!</h2>
+                        <p>Use o menu lateral para navegar entre as diferentes seções e gerenciar o conteúdo do seu site.</p>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="password">Senha:</label>
-                    <input type="password" id="password" placeholder="Digite sua senha" required>
+
+                <!-- Shows Tab -->
+                <div id="shows" class="tab-content">
+                    <div class="tab-header">
+                        <h3>🎵 Gerenciar Shows</h3>
+                        <div class="view-toggle">
+                            <button class="toggle-btn active" data-view="form">📝 Formulário</button>
+                            <button class="toggle-btn" data-view="preview">👁️ Preview</button>
+                        </div>
+                    </div>
+                    
+                    <div class="content-wrapper">
+                        <div class="form-section" id="shows-form">
+                            <h4>Adicionar Novo Show</h4>
+                            <form id="showForm">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="showTitle">Título do Show:</label>
+                                    <input type="text" id="showTitle" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="showDate">Data do Show:</label>
+                                    <input type="date" id="showDate" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="showTime">Horário:</label>
+                                    <input type="time" id="showTime" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="showImage">Imagem do Show:</label>
+                                    <div class="file-upload" onclick="document.getElementById('showImage').click()">
+                                        <input type="file" id="showImage" accept="image/*" style="display: none;">
+                                        📷 Escolher Imagem
+                                    </div>
+                                    <img id="showImagePreview" class="image-preview" style="display: none;">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="showDescription">Descrição:</label>
+                                <textarea id="showDescription" required></textarea>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="showFeatured">
+                                <label for="showFeatured">Mostrar no carrossel da página principal</label>
+                            </div>
+                            <button type="submit" class="btn btn-success">✨ Adicionar Show</button>
+                        </form>
+                    </div>
+
+                    <div class="preview-section" id="shows-preview" style="display: none;">
+                        <h4>Preview dos Shows</h4>
+                        <div class="preview-container">
+                            <div class="preview-site">
+                                <div class="preview-header">
+                                    <h2>🎸 Parrock Rock'n Parrilla</h2>
+                                    <p>Agenda de Shows</p>
+                                </div>
+                                <div class="preview-shows" id="previewShowsList">
+                                    <!-- Preview dos shows será renderizado aqui -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+
+                    <div class="content-list" id="showsList">
+                        <!-- Shows serão listados aqui -->
+                    </div>
                 </div>
-                <button type="submit" class="login-btn">Entrar</button>
-                <div id="errorMessage" class="error-message"></div>
-            </form>
+
+                <!-- Menu Tab -->
+                <div id="menu" class="tab-content">
+                    <div class="tab-header">
+                        <h3>🍽️ Gerenciar Cardápio</h3>
+                        <div class="view-toggle">
+                            <button class="toggle-btn active" data-view="form">📝 Formulário</button>
+                            <button class="toggle-btn" data-view="preview">👁️ Preview</button>
+                        </div>
+                    </div>
+                    
+                    <div class="content-wrapper">
+                        <div class="form-section" id="menu-form">
+                            <h4>Adicionar Item ao Cardápio</h4>
+                            <form id="menuForm">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="menuName">Nome do Item:</label>
+                                    <input type="text" id="menuName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="menuCategory">Categoria:</label>
+                                    <select id="menuCategory" required>
+                                        <option value="">Selecione uma categoria</option>
+                                        <option value="entradas">Entradas</option>
+                                        <option value="menu-executivo">Menu Executivo</option>
+                                        <option value="carnes">Carnes</option>
+                                        <option value="acompanhamentos">Acompanhamentos</option>
+                                        <option value="porcoes">Porções</option>
+                                        <option value="burguers">Burguers</option>
+                                        <option value="sobremesas">Sobremesas</option>
+                                        <option value="chopp-370ml">Chopp 370ml</option>
+                                        <option value="cervejas-long-neck">Cervejas Long Neck</option>
+                                        <option value="cervejas-600ml">Cervejas 600ml</option>
+                                        <option value="bebidas">Bebidas</option>
+                                        <option value="drinks">Drinks</option>
+                                        <option value="drinks-autorais">Drinks Autorais</option>
+                                        <option value="doses">Doses</option>
+                                        <option value="vinhos">Vinhos</option>
+                                        <option value="convite">Convite</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="menuPrice">Preço (R$):</label>
+                                    <input type="number" id="menuPrice" step="0.01" min="0" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="menuImage">Imagem do Item:</label>
+                                    <div class="file-upload" onclick="document.getElementById('menuImage').click()">
+                                        <input type="file" id="menuImage" accept="image/*" style="display: none;">
+                                        📷 Escolher Imagem
+                                    </div>
+                                    <img id="menuImagePreview" class="image-preview" style="display: none;">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="menuDescription">Descrição:</label>
+                                <textarea id="menuDescription" required></textarea>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="menuFeatured">
+                                <label for="menuFeatured">Item em destaque</label>
+                            </div>
+                            <button type="submit" class="btn btn-success">✨ Adicionar Item</button>
+                        </form>
+                    </div>
+
+                    <div class="preview-section" id="menu-preview" style="display: none;">
+                        <h4>Preview do Cardápio</h4>
+                        <div class="preview-container">
+                            <div class="preview-site">
+                                <div class="preview-header">
+                                    <h2>🍽️ Cardápio Parrock</h2>
+                                    <p>Nossos pratos e bebidas</p>
+                                </div>
+                                <div class="preview-menu" id="previewMenuList">
+                                    <!-- Preview do cardápio será renderizado aqui -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+
+                    <div class="content-list" id="menuList">
+                        <!-- Itens do cardápio serão listados aqui -->
+                    </div>
+                </div>
+
+                <!-- Promotions Tab -->
+                <div id="promotions" class="tab-content">
+                    <div class="tab-header">
+                        <h3>🎯 Gerenciar Promoções</h3>
+                        <div class="view-toggle">
+                            <button class="toggle-btn active" data-view="form">📝 Formulário</button>
+                            <button class="toggle-btn" data-view="preview">👁️ Preview</button>
+                        </div>
+                    </div>
+                    
+                    <div class="content-wrapper">
+                        <div class="form-section" id="promotions-form">
+                            <h4>Criar Nova Promoção</h4>
+                            <form id="promotionForm">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="promotionTitle">Título da Promoção:</label>
+                                    <input type="text" id="promotionTitle" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="promotionValidUntil">Válido até:</label>
+                                    <input type="date" id="promotionValidUntil" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="promotionImage">Imagem da Promoção:</label>
+                                <div class="file-upload" onclick="document.getElementById('promotionImage').click()">
+                                    <input type="file" id="promotionImage" accept="image/*" style="display: none;">
+                                    📷 Escolher Imagem
+                                </div>
+                                <img id="promotionImagePreview" class="image-preview" style="display: none;">
+                            </div>
+                            <div class="form-group">
+                                <label for="promotionDescription">Descrição:</label>
+                                <textarea id="promotionDescription" required></textarea>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="promotionFeatured">
+                                <label for="promotionFeatured">Mostrar no carrossel da página principal</label>
+                            </div>
+                            <button type="submit" class="btn btn-success">✨ Criar Promoção</button>
+                        </form>
+                    </div>
+
+                    <div class="preview-section" id="promotions-preview" style="display: none;">
+                        <h4>Preview das Promoções</h4>
+                        <div class="preview-container">
+                            <div class="preview-site">
+                                <div class="preview-header">
+                                    <h2>🎯 Promoções da Semana</h2>
+                                    <p>Ofertas especiais do Parrock</p>
+                                </div>
+                                <div class="preview-promotions" id="previewPromotionsList">
+                                    <!-- Preview das promoções será renderizado aqui -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+
+                    <div class="content-list" id="promotionsList">
+                        <!-- Promoções serão listadas aqui -->
+                    </div>
+                </div>
+
+                <!-- Images Tab -->
+                <div id="images" class="tab-content">
+                    <div class="tab-header">
+                        <h3>🖼️ Gerenciar Imagens</h3>
+                    </div>
+                    
+                    <div class="content-wrapper">
+
+                        <div class="preview-section" id="images-preview">
+                        <h4>Preview das Imagens</h4>
+                        <div class="preview-container">
+                            <div class="preview-site">
+                                <div class="preview-header">
+                                    <h2>🖼️ Galeria de Imagens</h2>
+                                    <p>Imagens organizadas por categoria</p>
+                                </div>
+                                <div class="preview-images" id="previewImagesList">
+                                    <!-- Preview das imagens será renderizado aqui -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+
+                    <div class="content-list" id="imagesList">
+                        <!-- Imagens serão listadas aqui -->
+                    </div>
+                </div>
+
+                <!-- Content Tab -->
+                <div id="content" class="tab-content">
+                    <div class="tab-header">
+                        <h3>📝 Gerenciar Conteúdo</h3>
+                    </div>
+                    
+                    <div class="content-wrapper">
+
+                    <div class="preview-section" id="content-preview">
+                        <h4>Preview do Conteúdo</h4>
+                        <div class="preview-container">
+                            <div class="preview-site">
+                                <div class="preview-header">
+                                    <h2>📝 Conteúdo do Site</h2>
+                                    <p>Seções e textos do Parrock</p>
+                                </div>
+                                <div class="preview-content" id="previewContentList">
+                                    <!-- Preview do conteúdo será renderizado aqui -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+
+                    <div class="content-list" id="contentList">
+                        <!-- Conteúdos serão listados aqui -->
+                    </div>
+                </div>
+
+                <!-- Settings Tab -->
+                <div id="settings" class="tab-content">
+                    <div class="form-section">
+                        <h3>⚙️ Configurações do Site</h3>
+                        <form id="settingsForm">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="siteTitle">Título do Site:</label>
+                                    <input type="text" id="siteTitle" value="Parrock Rock'n Parrilla">
+                                </div>
+                                <div class="form-group">
+                                    <label for="siteLogo">Logo do Site:</label>
+                                    <div class="file-upload" onclick="document.getElementById('siteLogo').click()">
+                                        <input type="file" id="siteLogo" accept="image/*" style="display: none;">
+                                        📷 Escolher Logo
+                                    </div>
+                                    <img id="siteLogoPreview" class="image-preview" style="display: none;">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="siteDescription">Descrição do Site:</label>
+                                <textarea id="siteDescription">O melhor rock'n roll com a melhor parrilla da cidade!</textarea>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="primaryColor">Cor Primária:</label>
+                                    <input type="color" id="primaryColor" value="#d4af37">
+                                </div>
+                                <div class="form-group">
+                                    <label for="secondaryColor">Cor Secundária:</label>
+                                    <input type="color" id="secondaryColor" value="#1a1a1a">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-success">✨ Salvar Configurações</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Admin Dashboard -->
-    <div class="admin-dashboard" id="adminDashboard">
-        <div class="admin-header">
-            <h1>Painel Administrativo</h1>
-            <button class="logout-btn" onclick="logout()">
-                <i class="fas fa-sign-out-alt"></i> Sair
-            </button>
-        </div>
-
-        <div class="admin-sections">
-            <!-- Promotions Management -->
-            <div class="admin-section">
-                <h2>Gerenciar Promoções</h2>
-                <form id="adminPromotionsForm" class="item-form">
-                    <div class="form-group">
-                        <input type="text" id="adminPromoName" placeholder="Nome da promoção" required>
-                    </div>
-                    <div class="form-group">
-                        <input type="text" id="adminPromoPrice" placeholder="Preço (ex: R$ 45,00)" required>
-                    </div>
-                    <div class="form-group">
-                        <textarea id="adminPromoDescription" placeholder="Descrição da promoção" rows="3" required></textarea>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="adminPromoValidity">Válido até:</label>
-                            <input type="date" id="adminPromoValidity" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="adminPromoBadge">Badge (opcional):</label>
-                            <input type="text" id="adminPromoBadge" placeholder="ex: 50% OFF">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>
-                            <input type="checkbox" id="adminPromoFeatured"> Destacar na página principal
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <label for="adminPromoImage">Imagem da promoção:</label>
-                        <input type="file" id="adminPromoImage" accept="image/*">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Adicionar Promoção</button>
-                </form>
-                
-                <div class="admin-promotions-list" id="adminPromotionsList">
-                    <!-- Promotions will be loaded here -->
-                </div>
+    <!-- Modal para substituir imagem -->
+    <div id="imageModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🔄 Substituir Imagem</h3>
+                <span class="close" onclick="closeImageModal()">&times;</span>
             </div>
-
-            <!-- Menu Management -->
-            <div class="admin-section">
-                <h2>Gerenciar Cardápio</h2>
-                <form id="adminMenuForm" class="item-form">
+            <div class="modal-body">
+                <form id="imageModalForm">
                     <div class="form-group">
-                        <input type="text" id="adminMenuName" placeholder="Nome do prato" required>
+                        <label for="modalImageName">Nome da Imagem:</label>
+                        <input type="text" id="modalImageName" readonly>
                     </div>
                     <div class="form-group">
-                        <input type="text" id="adminMenuPrice" placeholder="Preço (ex: R$ 45,00)" required>
-                    </div>
-                    <div class="form-group">
-                        <textarea id="adminMenuDescription" placeholder="Descrição do prato" rows="3" required></textarea>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="adminMenuCategory">Categoria:</label>
-                            <select id="adminMenuCategory" required>
-                                <option value="">Selecione uma categoria</option>
-                                <option value="entradas">Entradas</option>
-                                <option value="menu executivo">Menu Executivo</option>
-                                <option value="carnes">Carnes</option>
-                                <option value="acompanhamentos">Acompanhamentos</option>
-                                <option value="porcoes">Porções</option>
-                                <option value="burguers">Burguers</option>
-                                <option value="sobremesas">Sobremesas</option>
-                                <option value="chopp 370ml">Chopp 370ml</option>
-                                <option value="cervejas long neck">Cervejas Long Neck</option>
-                                <option value="cervejas 600ml">Cervejas 600ml</option>
-                                <option value="bebidas">Bebidas</option>
-                                <option value="drinks">Drinks</option>
-                                <option value="drinks autorais">Drinks Autorais</option>
-                                <option value="doses">Doses</option>
-                                <option value="vinhos">Vinhos</option>
-                                <option value="convite">Convite</option>
-                            </select>
+                        <label for="modalImageFile">Nova Imagem:</label>
+                        <div class="file-upload" onclick="document.getElementById('modalImageFile').click()">
+                            <input type="file" id="modalImageFile" accept="image/*" required style="display: none;">
+                            📷 Escolher Nova Imagem
                         </div>
-                        <div class="form-group">
-                            <label for="adminMenuTags">Tags (separadas por vírgula):</label>
-                            <input type="text" id="adminMenuTags" placeholder="ex: Picante, Vegetariano">
-                        </div>
+                        <img id="modalImagePreview" class="image-preview" style="display: none;">
                     </div>
                     <div class="form-group">
-                        <label>
-                            <input type="checkbox" id="adminMenuFeatured"> Destacar no cardápio
-                        </label>
+                        <label for="modalImageDescription">Descrição:</label>
+                        <textarea id="modalImageDescription"></textarea>
                     </div>
-                    <div class="form-group">
-                        <label for="adminMenuImage">Imagem do prato:</label>
-                        <input type="file" id="adminMenuImage" accept="image/*">
+                    <div class="modal-actions">
+                        <button type="submit" class="btn btn-success">✨ Substituir Imagem</button>
+                        <button type="button" class="btn btn-secondary" onclick="closeImageModal()">❌ Cancelar</button>
                     </div>
-                    <button type="submit" class="btn btn-primary">Adicionar ao Cardápio</button>
                 </form>
-                
-                <div class="admin-menu-items" id="adminMenuItems">
-                    <!-- Menu items will be loaded here -->
-                </div>
-            </div>
-
-            <!-- Shows Management -->
-            <div class="admin-section">
-                <h2>Gerenciar Shows</h2>
-                <form id="adminShowsForm" class="item-form">
-                    <div class="form-group">
-                        <input type="text" id="adminShowName" placeholder="Nome do show/artista" required>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <input type="date" id="adminShowDate" required>
-                        </div>
-                        <div class="form-group">
-                            <input type="time" id="adminShowTime" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <input type="text" id="adminShowPrice" placeholder="Preço do ingresso (ex: R$ 30,00)">
-                    </div>
-                    <div class="form-group">
-                        <textarea id="adminShowDescription" placeholder="Descrição do evento" rows="3" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>
-                            <input type="checkbox" id="adminShowFeatured"> Destacar na página principal
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <label for="adminShowImage">Imagem do evento:</label>
-                        <input type="file" id="adminShowImage" accept="image/*">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Adicionar à Agenda</button>
-                </form>
-                
-                <div class="admin-shows-list" id="adminShowsList">
-                    <!-- Shows will be loaded here -->
-                </div>
             </div>
         </div>
     </div>
 
+    <!-- Modal para editar conteúdo -->
+    <div id="contentModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>✏️ Editar Conteúdo</h3>
+                <span class="close" onclick="closeContentModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="contentModalForm">
+                    <div class="form-group">
+                        <label for="modalContentSection">Seção:</label>
+                        <input type="text" id="modalContentSection" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="modalContentTitle">Título:</label>
+                        <input type="text" id="modalContentTitle" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="modalContentText">Texto:</label>
+                        <textarea id="modalContentText" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="modalContentImage">Imagem (opcional):</label>
+                        <div class="file-upload" onclick="document.getElementById('modalContentImage').click()">
+                            <input type="file" id="modalContentImage" accept="image/*" style="display: none;">
+                            📷 Escolher Imagem
+                        </div>
+                        <img id="modalContentImagePreview" class="image-preview" style="display: none;">
+                    </div>
+                    
+                    <!-- Campos específicos para contato -->
+                    <div id="modalContactFields" style="display: none;">
+                        <h4 style="color: #d4af37; margin: 1rem 0;">📞 Dados de Contato</h4>
+                        <div class="form-group">
+                            <label for="modalContactAddress">Endereço:</label>
+                            <textarea id="modalContactAddress"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="modalContactPhone">Telefone:</label>
+                            <input type="text" id="modalContactPhone">
+                        </div>
+                        <div class="form-group">
+                            <label for="modalContactEmail">E-mail:</label>
+                            <input type="email" id="modalContactEmail">
+                        </div>
+                    </div>
+                    
+                    <div class="modal-actions">
+                        <button type="submit" class="btn btn-success">✨ Salvar Conteúdo</button>
+                        <button type="button" class="btn btn-secondary" onclick="closeContentModal()">❌ Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de confirmação de exclusão -->
+    <div id="confirmModal" class="modal" style="display: none;">
+        <div class="modal-content confirm-modal">
+            <div class="modal-header">
+                <h3>⚠️ Confirmar Exclusão</h3>
+                <span class="close" onclick="closeConfirmModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="confirm-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <p id="confirmMessage">Tem certeza que deseja excluir este item?</p>
+                <p class="confirm-warning">Esta ação não pode ser desfeita.</p>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeConfirmModal()">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+                <button type="button" class="btn btn-danger" onclick="executeDelete()">
+                    <i class="fas fa-trash"></i> Excluir
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
     <script>
-        // Admin credentials (in a real app, this would be server-side)
-        const ADMIN_CREDENTIALS = {
-            username: 'admin',
-            password: 'parrock2024'
-        };
+        // Sistema de navegação por abas
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                // Remove active de todos os itens
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                
+                // Adiciona active no item clicado
+                item.classList.add('active');
+                const tabId = item.dataset.tab;
+                document.getElementById(tabId).classList.add('active');
+                
+                // Atualiza preview quando muda de aba
+                updateAllPreviews();
+            });
+        });
 
-        // Check if user is already logged in
-        if (localStorage.getItem('parrockAdminLoggedIn') === 'true') {
-            showDashboard();
+        // Sistema de toggle entre formulário e preview
+        document.querySelectorAll('.toggle-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const view = e.target.dataset.view;
+                const tabContent = e.target.closest('.tab-content');
+                const formSection = tabContent.querySelector('.form-section');
+                const previewSection = tabContent.querySelector('.preview-section');
+                const toggleBtns = tabContent.querySelectorAll('.toggle-btn');
+                
+                // Remove active de todos os botões
+                toggleBtns.forEach(b => b.classList.remove('active'));
+                // Adiciona active no botão clicado
+                e.target.classList.add('active');
+                
+                if (view === 'form') {
+                    formSection.style.display = 'block';
+                    previewSection.style.display = 'none';
+                } else {
+                    formSection.style.display = 'none';
+                    previewSection.style.display = 'block';
+                    updateAllPreviews();
+                }
+            });
+        });
+
+        // Preview de imagens - versão ultra simplificada
+        function setupImagePreview(inputId, previewId) {
+            const input = document.getElementById(inputId);
+            const preview = document.getElementById(previewId);
+            
+            if (input && preview) {
+                input.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file && file.type.startsWith('image/')) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            preview.src = e.target.result;
+                            preview.style.display = 'block';
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
         }
 
-        // Login form handling
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+        // Configurar previews
+        setupImagePreview('showImage', 'showImagePreview');
+        setupImagePreview('menuImage', 'menuImagePreview');
+        setupImagePreview('promotionImage', 'promotionImagePreview');
+        setupImagePreview('imageFile', 'imageFilePreview');
+        setupImagePreview('contentImage', 'contentImagePreview');
+        setupImagePreview('siteLogo', 'siteLogoPreview');
+
+        // Atualizar estatísticas
+        function updateStats() {
+            const shows = JSON.parse(localStorage.getItem('shows') || '[]');
+            const menuItems = JSON.parse(localStorage.getItem('menuItems') || '[]');
+            const promotions = JSON.parse(localStorage.getItem('promotions') || '[]');
+            const images = JSON.parse(localStorage.getItem('images') || '[]');
+
+            document.getElementById('totalShows').textContent = shows.length;
+            document.getElementById('totalMenuItems').textContent = menuItems.length;
+            document.getElementById('totalPromotions').textContent = promotions.length;
+            document.getElementById('totalImages').textContent = images.length;
+        }
+
+        // Carregar dados existentes
+        function loadExistingData() {
+            updateStats();
+            loadShows();
+            loadMenuItems();
+            loadPromotions();
+            loadImages();
+            loadContent();
+        }
+
+        // Funções de carregamento (serão implementadas pelo EnhancedAdminManager)
+        function loadShows() {
+            // Implementado pelo EnhancedAdminManager
+        }
+
+        function loadMenuItems() {
+            // Implementado pelo EnhancedAdminManager
+        }
+
+        function loadPromotions() {
+            // Implementado pelo EnhancedAdminManager
+        }
+
+        function loadImages() {
+            // Implementado pelo EnhancedAdminManager
+        }
+
+        function loadContent() {
+            // Implementado pelo EnhancedAdminManager
+        }
+
+        // Função de logout
+        function logout() {
+            if (confirm('Tem certeza que deseja sair do painel administrativo?')) {
+                localStorage.removeItem('adminMode');
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Funções de Preview
+        function updateAllPreviews() {
+            updateShowsPreview();
+            updateMenuPreview();
+            updatePromotionsPreview();
+            updateImagesPreview();
+            updateContentPreview();
+        }
+
+        function updateShowsPreview() {
+            const shows = JSON.parse(localStorage.getItem('shows') || '[]');
+            const previewContainer = document.getElementById('previewShowsList');
             
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            const errorMessage = document.getElementById('errorMessage');
+            if (!previewContainer) return;
             
-            if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
-                localStorage.setItem('parrockAdminLoggedIn', 'true');
-                showDashboard();
+            if (shows.length === 0) {
+                previewContainer.innerHTML = `
+                    <div class="preview-empty">
+                        <div class="icon">🎵</div>
+                        <p>Nenhum show cadastrado ainda.</p>
+                        <p>Adicione shows usando o formulário ao lado.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            previewContainer.innerHTML = shows.map(show => `
+                <div class="preview-item">
+                    ${show.image ? `<img src="${show.image}" alt="${show.title}">` : ''}
+                    <h5>${show.title}</h5>
+                    <p>${show.description}</p>
+                    <div class="preview-meta">
+                        <span>📅 ${formatDate(show.date)}</span>
+                        <span>🕐 ${show.time}</span>
+                        ${show.featured ? '<span class="featured">⭐ Destaque</span>' : ''}
+                    </div>
+                    <div class="preview-item-actions">
+                        <button class="btn btn-warning btn-sm" onclick="editShow('${show.id || show.title}')">
+                            ✏️ Editar
+                        </button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteShow('${show.id || show.title}')">
+                            🗑️ Excluir
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateMenuPreview() {
+            const menuItems = JSON.parse(localStorage.getItem('menuItems') || '[]');
+            const previewContainer = document.getElementById('previewMenuList');
+            
+            if (!previewContainer) return;
+            
+            if (menuItems.length === 0) {
+                previewContainer.innerHTML = `
+                    <div class="preview-empty">
+                        <div class="icon">🍽️</div>
+                        <p>Nenhum item no cardápio ainda.</p>
+                        <p>Adicione itens usando o formulário ao lado.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Agrupar por categoria
+            const groupedItems = menuItems.reduce((acc, item) => {
+                if (!acc[item.category]) {
+                    acc[item.category] = [];
+                }
+                acc[item.category].push(item);
+                return acc;
+            }, {});
+            
+            previewContainer.innerHTML = Object.entries(groupedItems).map(([category, items]) => `
+                <div class="preview-category">
+                    <h6 style="color: #d4af37; font-size: 1.1rem; margin-bottom: 1rem; text-transform: capitalize; border-bottom: 1px solid #e9ecef; padding-bottom: 0.5rem;">
+                        ${category.replace('-', ' ')}
+                    </h6>
+                    ${items.map(item => `
+                        <div class="preview-item">
+                            ${item.image ? `<img src="${item.image}" alt="${item.name}">` : ''}
+                            <h5>${item.name}</h5>
+                            <p>${item.description}</p>
+                            <div class="preview-meta">
+                                <span>💰 R$ ${item.price.toFixed(2)}</span>
+                                ${item.featured ? '<span class="featured">⭐ Destaque</span>' : ''}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `).join('');
+        }
+
+        function updatePromotionsPreview() {
+            const promotions = JSON.parse(localStorage.getItem('promotions') || '[]');
+            const previewContainer = document.getElementById('previewPromotionsList');
+            
+            if (!previewContainer) return;
+            
+            if (promotions.length === 0) {
+                previewContainer.innerHTML = `
+                    <div class="preview-empty">
+                        <div class="icon">🎯</div>
+                        <p>Nenhuma promoção cadastrada ainda.</p>
+                        <p>Crie promoções usando o formulário ao lado.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            previewContainer.innerHTML = promotions.map(promotion => `
+                <div class="preview-item">
+                    ${promotion.image ? `<img src="${promotion.image}" alt="${promotion.title}">` : ''}
+                    <h5>${promotion.title}</h5>
+                    <p>${promotion.description}</p>
+                    <div class="preview-meta">
+                        <span>📅 Válido até: ${formatDate(promotion.validUntil)}</span>
+                        ${promotion.featured ? '<span class="featured">⭐ Destaque</span>' : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateImagesPreview() {
+            const previewContainer = document.getElementById('previewImagesList');
+            
+            if (!previewContainer) return;
+            
+            // Imagens atuais do site (extraídas do index.html)
+            const currentImages = {
+                'logo': [
+                    { name: 'Logo Principal', path: 'imagens/profile_parrocknparrilla.webp', description: 'Logo do Parrock Rock\'n Parrilla' }
+                ],
+                'hero': [
+                    { name: 'Logo Hero', path: 'imagens/profile_parrocknparrilla.webp', description: 'Logo principal na seção hero' }
+                ],
+                'about': [
+                    { name: 'Área Externa', path: 'imagens/Area-externo-parrock.webp', description: 'Ambiente externo do Parrock' }
+                ],
+                'gallery': [
+                    { name: 'Área Externa 1', path: 'imagens/Area-externo-parrock.webp', description: 'Área externa do Parrock' },
+                    { name: 'Área Externa 2', path: 'imagens/Area-externo-parrock-2.webp', description: 'Área externa do Parrock - Vista 2' },
+                    { name: 'Área Externa 3', path: 'imagens/area-externa.webp', description: 'Área externa do Parrock' },
+                    { name: 'Área da Parrilla', path: 'imagens/area-parrilla.webp', description: 'Área interna da parrilla' }
+                ]
+            };
+            
+            // Imagens adicionadas pelo admin
+            const uploadedImages = JSON.parse(localStorage.getItem('images') || '[]');
+            
+            // Mesclar imagens atuais com as adicionadas
+            const allImages = { ...currentImages };
+            uploadedImages.forEach(image => {
+                if (!allImages[image.category]) {
+                    allImages[image.category] = [];
+                }
+                allImages[image.category].push({
+                    id: image.id || image.name,
+                    name: image.name,
+                    path: image.data,
+                    description: image.description,
+                    isUploaded: true
+                });
+            });
+            
+            // Verificar se há imagens para mostrar
+            const hasImages = Object.values(allImages).some(category => category.length > 0);
+            
+            if (!hasImages) {
+                previewContainer.innerHTML = `
+                    <div class="preview-empty">
+                        <div class="icon">🖼️</div>
+                        <p>Nenhuma imagem disponível.</p>
+                        <p>Faça upload de imagens usando o formulário ao lado.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            previewContainer.innerHTML = Object.entries(allImages).map(([category, categoryImages]) => {
+                if (categoryImages.length === 0) return '';
+                
+                return `
+                    <div class="preview-category">
+                        <h6 style="color: #d4af37; font-size: 1.1rem; margin-bottom: 1rem; text-transform: capitalize; border-bottom: 1px solid #e9ecef; padding-bottom: 0.5rem;">
+                            ${category.replace('-', ' ')}
+                        </h6>
+                        <div class="preview-images-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem;">
+                            ${categoryImages.map(image => `
+                                <div class="preview-image-item" style="text-align: center;">
+                                    <img src="${image.path}" alt="${image.name}" style="width: 100%; height: 120px; object-fit: cover; border-radius: 8px; margin-bottom: 0.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" onerror="this.style.display='none'">
+                                    <h6 style="font-size: 0.9rem; margin: 0; color: #333;">${image.name}</h6>
+                                    ${image.description ? `<p style="font-size: 0.8rem; color: #666; margin: 0.25rem 0 0 0;">${image.description}</p>` : ''}
+                                    ${image.isUploaded ? '<span style="font-size: 0.7rem; color: #28a745; font-weight: 600;">📤 Upload</span>' : '<span style="font-size: 0.7rem; color: #6c757d; font-weight: 600;">📄 Padrão</span>'}
+                                       <div class="item-actions" style="margin-top: 0.5rem;">
+                                           <button class="btn btn-warning replace-image-btn" data-image-path="${image.path}" data-image-name="${image.name}" style="padding: 0.3rem 0.8rem; font-size: 0.8rem;">🔄 Substituir</button>
+                                       </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }).filter(html => html).join('');
+        }
+
+        function updateContentPreview() {
+            const previewContainer = document.getElementById('previewContentList');
+            
+            if (!previewContainer) return;
+            
+            // Conteúdo atual das seções do site (extraído do index.html)
+            const currentContent = {
+                'hero': {
+                    title: 'O ponto de encontro dos apaixonados por rock e da cultura da carne na parrilla',
+                    text: 'Desde de 2019 entregando experiências únicas',
+                    image: 'imagens/profile_parrocknparrilla.webp'
+                },
+                'about': {
+                    title: 'Sobre o Parrock',
+                    text: 'Desde 2019, o Parrock Rock\'n Parrilla tem sido o ponto de encontro dos apaixonados por rock e da cultura da carne na parrilla em Campo Grande/MS. Com uma atmosfera única, oferecemos uma experiência completa para eventos sociais e corporativos, aniversários, coquetéis, casamentos, confraternizações e muito mais.\n\nVenha se juntar a nós e aproveite momentos memoráveis no Parrock Rock\'n Parrilla!',
+                    image: 'imagens/Area-externo-parrock.webp'
+                },
+                'services': {
+                    title: 'Nossos Serviços',
+                    text: 'Experiências completas para todas as ocasiões:\n\n• Eventos Corporativos - Espaço ideal para reuniões, treinamentos e confraternizações empresariais\n• Aniversários - Celebre em um ambiente especial com música rock e gastronomia de qualidade\n• Coquetéis - Eventos sociais elegantes com drinks especiais e ambiente sofisticado\n• Casamentos - Celebre o dia mais especial da sua vida em um ambiente único\n• Confraternizações - Reúna amigos e familiares para momentos especiais\n• Experiência Gastronômica - Desfrute da autêntica cultura da parrilla com carnes selecionadas',
+                    image: null
+                },
+                'contact': {
+                    title: 'Entre em Contato',
+                    text: 'Reserve sua mesa ou solicite um orçamento\n\n📍 Endereço: Rua Euclides da Cunha, 423 - Centro, Campo Grande/MS\n📞 Telefone: (67) 99999-9999\n📧 E-mail: contato@parrock.com.br\n\nRedes Sociais: Instagram e WhatsApp disponíveis',
+                    image: null
+                }
+            };
+            
+            // Conteúdo personalizado do localStorage
+            const customContent = JSON.parse(localStorage.getItem('siteContent') || '[]');
+            
+            // Mesclar conteúdo atual com personalizado
+            const mergedContent = { ...currentContent };
+            customContent.forEach(item => {
+                if (mergedContent[item.section]) {
+                    mergedContent[item.section] = {
+                        ...mergedContent[item.section],
+                        title: item.title,
+                        text: item.text,
+                        image: item.image || mergedContent[item.section].image
+                    };
+                }
+            });
+            
+            previewContainer.innerHTML = Object.entries(mergedContent).map(([section, content]) => `
+                <div class="preview-item">
+                    ${content.image ? `<img src="${content.image}" alt="${content.title}" onerror="this.style.display='none'">` : ''}
+                    <h5>${section.replace('-', ' ').toUpperCase()}</h5>
+                    <h6 style="color: #d4af37; font-size: 1.2rem; margin-bottom: 0.5rem;">${content.title}</h6>
+                    <p style="line-height: 1.6; color: #333;">${content.text}</p>
+                    <div class="preview-meta">
+                        <span>📝 Seção: ${section}</span>
+                        <span>${customContent.find(item => item.section === section) ? '✏️ Personalizado' : '📄 Padrão'}</span>
+                    </div>
+                       <div class="item-actions" style="margin-top: 1rem;">
+                           <button class="btn btn-secondary edit-content-btn" data-section="${section}" style="padding: 0.5rem 1rem; font-size: 0.9rem;">✏️ Editar</button>
+                       </div>
+                </div>
+            `).join('');
+        }
+
+        // Funções para gerenciar conteúdo das seções
+        function editContentSection(section) {
+            console.log(`🔧 Executando editContentSection para: ${section}`);
+            const customContent = JSON.parse(localStorage.getItem('siteContent') || '[]');
+            const existingContent = customContent.find(item => item.section === section);
+            console.log(`📋 Conteúdo personalizado encontrado:`, existingContent);
+            
+            // Conteúdo atual das seções do site (extraído do index.html)
+            const currentContent = {
+                'hero': {
+                    title: 'O ponto de encontro dos apaixonados por rock e da cultura da carne na parrilla',
+                    text: 'Desde de 2019 entregando experiências únicas',
+                    image: 'imagens/profile_parrocknparrilla.webp'
+                },
+                'about': {
+                    title: 'Sobre o Parrock',
+                    text: 'Desde 2019, o Parrock Rock\'n Parrilla tem sido o ponto de encontro dos apaixonados por rock e da cultura da carne na parrilla em Campo Grande/MS. Com uma atmosfera única, oferecemos uma experiência completa para eventos sociais e corporativos, aniversários, coquetéis, casamentos, confraternizações e muito mais.\n\nVenha se juntar a nós e aproveite momentos memoráveis no Parrock Rock\'n Parrilla!',
+                    image: 'imagens/Area-externo-parrock.webp'
+                },
+                'services': {
+                    title: 'Nossos Serviços',
+                    text: 'Experiências completas para todas as ocasiões:\n\n• Eventos Corporativos - Espaço ideal para reuniões, treinamentos e confraternizações empresariais\n• Aniversários - Celebre em um ambiente especial com música rock e gastronomia de qualidade\n• Coquetéis - Eventos sociais elegantes com drinks especiais e ambiente sofisticado\n• Casamentos - Celebre o dia mais especial da sua vida em um ambiente único\n• Confraternizações - Reúna amigos e familiares para momentos especiais\n• Experiência Gastronômica - Desfrute da autêntica cultura da parrilla com carnes selecionadas',
+                    image: null
+                },
+                'contact': {
+                    title: 'Entre em Contato',
+                    text: 'Reserve sua mesa ou solicite um orçamento\n\n📍 Endereço: Rua Euclides da Cunha, 423 - Centro, Campo Grande/MS\n📞 Telefone: (67) 99999-9999\n📧 E-mail: contato@parrock.com.br\n\nRedes Sociais: Instagram e WhatsApp disponíveis',
+                    image: null
+                }
+            };
+            
+            // Mesclar conteúdo padrão com personalizado
+            let contentToEdit = currentContent[section];
+            if (existingContent) {
+                contentToEdit = {
+                    ...contentToEdit,
+                    title: existingContent.title || contentToEdit.title,
+                    text: existingContent.text || contentToEdit.text,
+                    image: existingContent.image || contentToEdit.image,
+                    contactData: existingContent.contactData || contentToEdit.contactData
+                };
+            }
+            console.log(`📝 Conteúdo a editar:`, contentToEdit);
+            
+            if (contentToEdit) {
+                console.log(`📝 Preenchendo formulário...`);
+                // Preencher formulário com dados
+                const sectionSelect = document.getElementById('contentSection');
+                const titleInput = document.getElementById('contentTitle');
+                const textInput = document.getElementById('contentText');
+                
+                console.log(`📝 Elementos encontrados:`, {
+                    sectionSelect: !!sectionSelect,
+                    titleInput: !!titleInput,
+                    textInput: !!textInput
+                });
+                
+                if (sectionSelect) {
+                    sectionSelect.value = section;
+                    sectionSelect.disabled = true; // Não permitir mudança de seção
+                }
+                if (titleInput) titleInput.value = contentToEdit.title;
+                if (textInput) textInput.value = contentToEdit.text;
+                
+                // Preencher campos específicos de contato se existirem
+                if (section === 'contact' && contentToEdit.contactData) {
+                    const contactFields = document.getElementById('contactFields');
+                    if (contactFields) contactFields.style.display = 'block';
+                    
+                    const addressField = document.getElementById('contactAddress');
+                    const phoneField = document.getElementById('contactPhone');
+                    const emailField = document.getElementById('contactEmail');
+                    
+                    if (addressField && contentToEdit.contactData.address) {
+                        addressField.value = contentToEdit.contactData.address;
+                    }
+                    if (phoneField && contentToEdit.contactData.phone) {
+                        phoneField.value = contentToEdit.contactData.phone;
+                    }
+                    if (emailField && contentToEdit.contactData.email) {
+                        emailField.value = contentToEdit.contactData.email;
+                    }
+                }
+                
+                if (contentToEdit.image) {
+                    document.getElementById('contentImagePreview').src = contentToEdit.image;
+                    document.getElementById('contentImagePreview').style.display = 'block';
+                } else {
+                    document.getElementById('contentImagePreview').style.display = 'none';
+                }
+                
+                // Mudar para o formulário
+                switchToForm('content');
+                showSuccess(existingContent ? 'Conteúdo personalizado carregado para edição!' : 'Conteúdo padrão carregado para edição!');
+            }
+        }
+
+        function deleteContentSection(section) {
+            if (confirm(`Tem certeza que deseja excluir o conteúdo personalizado da seção "${section}"?`)) {
+                const customContent = JSON.parse(localStorage.getItem('siteContent') || '[]');
+                const filteredContent = customContent.filter(item => item.section !== section);
+                localStorage.setItem('siteContent', JSON.stringify(filteredContent));
+                
+                updateContentPreview();
+                showSuccess('Conteúdo personalizado excluído! Voltou ao padrão.');
+            }
+        }
+
+        function customizeContentSection(section) {
+            // Preencher formulário com dados padrão da seção (conteúdo real do site)
+            const currentContent = {
+                'hero': {
+                    title: 'O ponto de encontro dos apaixonados por rock e da cultura da carne na parrilla',
+                    text: 'Desde de 2019 entregando experiências únicas',
+                    image: 'imagens/profile_parrocknparrilla.webp'
+                },
+                'about': {
+                    title: 'Sobre o Parrock',
+                    text: 'Desde 2019, o Parrock Rock\'n Parrilla tem sido o ponto de encontro dos apaixonados por rock e da cultura da carne na parrilla em Campo Grande/MS. Com uma atmosfera única, oferecemos uma experiência completa para eventos sociais e corporativos, aniversários, coquetéis, casamentos, confraternizações e muito mais.\n\nVenha se juntar a nós e aproveite momentos memoráveis no Parrock Rock\'n Parrilla!',
+                    image: 'imagens/Area-externo-parrock.webp'
+                },
+                'services': {
+                    title: 'Nossos Serviços',
+                    text: 'Experiências completas para todas as ocasiões:\n\n• Eventos Corporativos - Espaço ideal para reuniões, treinamentos e confraternizações empresariais\n• Aniversários - Celebre em um ambiente especial com música rock e gastronomia de qualidade\n• Coquetéis - Eventos sociais elegantes com drinks especiais e ambiente sofisticado\n• Casamentos - Celebre o dia mais especial da sua vida em um ambiente único\n• Confraternizações - Reúna amigos e familiares para momentos especiais\n• Experiência Gastronômica - Desfrute da autêntica cultura da parrilla com carnes selecionadas',
+                    image: null
+                },
+                'contact': {
+                    title: 'Entre em Contato',
+                    text: 'Reserve sua mesa ou solicite um orçamento',
+                    image: null,
+                    contactData: {
+                        address: 'Rua Euclides da Cunha, 423\nCentro, Campo Grande/MS',
+                        phone: '(67) 99999-9999',
+                        email: 'contato@parrock.com.br'
+                    }
+                }
+            };
+            
+            const sectionData = currentContent[section];
+            if (sectionData) {
+                document.getElementById('contentSection').value = section;
+                document.getElementById('contentTitle').value = sectionData.title;
+                document.getElementById('contentText').value = sectionData.text;
+                
+                // Preencher campos específicos de contato se existirem
+                if (section === 'contact' && sectionData.contactData) {
+                    const contactFields = document.getElementById('contactFields');
+                    if (contactFields) contactFields.style.display = 'block';
+                    
+                    const addressField = document.getElementById('contactAddress');
+                    const phoneField = document.getElementById('contactPhone');
+                    const emailField = document.getElementById('contactEmail');
+                    
+                    if (addressField && sectionData.contactData.address) {
+                        addressField.value = sectionData.contactData.address;
+                    }
+                    if (phoneField && sectionData.contactData.phone) {
+                        phoneField.value = sectionData.contactData.phone;
+                    }
+                    if (emailField && sectionData.contactData.email) {
+                        emailField.value = sectionData.contactData.email;
+                    }
+                }
+                
+                if (sectionData.image) {
+                    document.getElementById('contentImagePreview').src = sectionData.image;
+                    document.getElementById('contentImagePreview').style.display = 'block';
+                } else {
+                    document.getElementById('contentImagePreview').style.display = 'none';
+                }
+                
+                // Mudar para o formulário
+                switchToForm('content');
+                showSuccess('Conteúdo padrão carregado para personalização!');
+            }
+        }
+
+        function removeContentSection(section) {
+            if (confirm(`Tem certeza que deseja remover completamente a seção "${section}"? Esta ação não pode ser desfeita.`)) {
+                // Remover conteúdo personalizado se existir
+                const customContent = JSON.parse(localStorage.getItem('siteContent') || '[]');
+                const filteredContent = customContent.filter(item => item.section !== section);
+                localStorage.setItem('siteContent', JSON.stringify(filteredContent));
+                
+                updateContentPreview();
+                showSuccess('Seção removida com sucesso!');
+            }
+        }
+
+        function clearContentForm() {
+            document.getElementById('contentForm').reset();
+            document.getElementById('contentImagePreview').style.display = 'none';
+            showSuccess('Formulário limpo!');
+        }
+
+        // Funções para gerenciar imagens
+        function editImage(imageId) {
+            const images = JSON.parse(localStorage.getItem('images') || '[]');
+            const image = images.find(img => img.id === imageId || img.name === imageId);
+            
+            if (image) {
+                // Preencher formulário com dados da imagem
+                document.getElementById('imageName').value = image.name;
+                document.getElementById('imageCategory').value = image.category;
+                document.getElementById('imageDescription').value = image.description || '';
+                
+                if (image.data) {
+                    document.getElementById('imagePreview').src = image.data;
+                    document.getElementById('imagePreview').style.display = 'block';
+                }
+                
+                // Mudar para o formulário
+                switchToForm('images');
+                showSuccess('Imagem carregada para edição!');
+            }
+        }
+
+        function deleteImage(imageId) {
+            const images = JSON.parse(localStorage.getItem('images') || '[]');
+            const image = images.find(img => img.id === imageId || img.name === imageId);
+            
+            if (!image) {
+                alert('Imagem não encontrada!');
+                return;
+            }
+            
+            // Configurar ação de exclusão
+            pendingDeleteAction = () => {
+                const filteredImages = images.filter(img => img.id !== imageId && img.name !== imageId);
+                localStorage.setItem('images', JSON.stringify(filteredImages));
+                
+                updateImagesPreview();
+                showSuccess('Imagem excluída com sucesso!');
+            };
+            
+            pendingDeleteItem = image.name || imageId;
+            
+            // Mostrar modal de confirmação
+            showConfirmModal(`Tem certeza que deseja excluir a imagem "${image.name || imageId}"?`);
+        }
+
+        function viewImage(imagePath) {
+            // Abrir imagem em nova aba
+            window.open(imagePath, '_blank');
+        }
+
+        function replaceImage(imagePath) {
+            console.log(`🔄 Executando replaceImage para: ${imagePath}`);
+            
+            // Extrair nome da imagem do caminho
+            const imageName = imagePath.split('/').pop().split('.')[0];
+            console.log(`📝 Nome extraído: ${imageName}`);
+            
+            // Preencher formulário para substituir imagem
+            const nameField = document.getElementById('imageName');
+            const descriptionField = document.getElementById('imageDescription');
+            
+            if (nameField) {
+                nameField.value = imageName;
+                nameField.disabled = true; // Não permitir mudança de nome na substituição
+                console.log(`✅ Campo nome preenchido: ${imageName}`);
+            }
+            
+            if (descriptionField) {
+                descriptionField.value = `Imagem substituída: ${imageName}`;
+                console.log(`✅ Campo descrição preenchido`);
+            }
+            
+            // Armazenar o caminho da imagem original para referência
+            window.currentReplacingImage = imagePath;
+            console.log(`💾 Imagem original armazenada: ${imagePath}`);
+            
+            // Mudar para o formulário
+            switchToForm('images');
+            showSuccess('Formulário preparado para substituir a imagem! Clique em "Upload Imagem" para confirmar a substituição.');
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('pt-BR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+        }
+
+        // Atualizar preview quando dados mudam
+        function refreshPreviews() {
+            updateAllPreviews();
+            updateStats();
+            bindPreviewButtons();
+        }
+
+        // Vincular event listeners aos botões de preview usando delegação de eventos
+        function bindPreviewButtons() {
+            console.log('🔗 Vinculando botões de preview...');
+            
+            // Usar delegação de eventos no documento
+            document.addEventListener('click', function(e) {
+                // Botões de conteúdo
+                if (e.target.classList.contains('edit-content-btn')) {
+                    e.preventDefault();
+                    const section = e.target.getAttribute('data-section');
+                    console.log(`📝 Clicou em editar seção: ${section}`);
+                    openContentModal(section);
+                }
+                
+                // Botões de imagens
+                
+                if (e.target.classList.contains('replace-image-btn')) {
+                    e.preventDefault();
+                    const imagePath = e.target.getAttribute('data-image-path');
+                    const imageName = e.target.getAttribute('data-image-name');
+                    console.log(`🔄 Clicou em substituir imagem: ${imagePath}`);
+                    openImageModal(imagePath, imageName);
+                }
+            });
+            
+            // Contar botões encontrados
+            const editContentBtns = document.querySelectorAll('.edit-content-btn');
+            const replaceImageBtns = document.querySelectorAll('.replace-image-btn');
+            
+            console.log(`📝 Encontrados ${editContentBtns.length} botões de editar conteúdo`);
+            console.log(`🔄 Encontrados ${replaceImageBtns.length} botões de substituir imagem`);
+        }
+
+        // Funções para modais
+        function openImageModal(imagePath, imageName) {
+            const modal = document.getElementById('imageModal');
+            const nameField = document.getElementById('modalImageName');
+            const descriptionField = document.getElementById('modalImageDescription');
+            
+            if (nameField) nameField.value = imageName;
+            if (descriptionField) descriptionField.value = `Imagem substituída: ${imageName}`;
+            
+            // Armazenar dados para substituição
+            window.currentReplacingImage = imagePath;
+            window.currentReplacingName = imageName;
+            
+            modal.style.display = 'flex';
+        }
+        
+        function closeImageModal() {
+            document.getElementById('imageModal').style.display = 'none';
+            document.getElementById('imageModalForm').reset();
+            document.getElementById('modalImagePreview').style.display = 'none';
+            window.currentReplacingImage = null;
+            window.currentReplacingName = null;
+        }
+        
+        function openContentModal(section) {
+            const modal = document.getElementById('contentModal');
+            
+            // Carregar dados da seção
+            const currentContent = {
+                'hero': {
+                    title: 'O ponto de encontro dos apaixonados por rock e da cultura da carne na parrilla',
+                    text: 'Desde de 2019 entregando experiências únicas',
+                    image: 'imagens/profile_parrocknparrilla.webp'
+                },
+                'about': {
+                    title: 'Sobre o Parrock',
+                    text: 'Desde 2019, o Parrock Rock\'n Parrilla tem sido o ponto de encontro dos apaixonados por rock e da cultura da carne na parrilla em Campo Grande/MS. Com uma atmosfera única, oferecemos uma experiência completa para eventos sociais e corporativos, aniversários, coquetéis, casamentos, confraternizações e muito mais.\n\nVenha se juntar a nós e aproveite momentos memoráveis no Parrock Rock\'n Parrilla!',
+                    image: 'imagens/Area-externo-parrock.webp'
+                },
+                'services': {
+                    title: 'Nossos Serviços',
+                    text: 'Experiências completas para todas as ocasiões:\n\n• Eventos Corporativos - Espaço ideal para reuniões, treinamentos e confraternizações empresariais\n• Aniversários - Celebre em um ambiente especial com música rock e gastronomia de qualidade\n• Coquetéis - Eventos sociais elegantes com drinks especiais e ambiente sofisticado\n• Casamentos - Celebre o dia mais especial da sua vida em um ambiente único\n• Confraternizações - Reúna amigos e familiares para momentos especiais\n• Experiência Gastronômica - Desfrute da autêntica cultura da parrilla com carnes selecionadas',
+                    image: null
+                },
+                'contact': {
+                    title: 'Entre em Contato',
+                    text: 'Reserve sua mesa ou solicite um orçamento',
+                    image: null,
+                    contactData: {
+                        address: 'Rua Euclides da Cunha, 423\nCentro, Campo Grande/MS',
+                        phone: '(67) 99999-9999',
+                        email: 'contato@parrock.com.br'
+                    }
+                }
+            };
+            
+            // Mesclar com conteúdo personalizado se existir
+            const customContent = JSON.parse(localStorage.getItem('siteContent') || '[]');
+            const customItem = customContent.find(item => item.section === section);
+            
+            let contentToEdit = currentContent[section];
+            if (customItem) {
+                contentToEdit = {
+                    ...contentToEdit,
+                    title: customItem.title || contentToEdit.title,
+                    text: customItem.text || contentToEdit.text,
+                    image: customItem.image || contentToEdit.image,
+                    contactData: customItem.contactData || contentToEdit.contactData
+                };
+            }
+            
+            // Preencher modal
+            document.getElementById('modalContentSection').value = section;
+            document.getElementById('modalContentTitle').value = contentToEdit.title;
+            document.getElementById('modalContentText').value = contentToEdit.text;
+            
+            // Mostrar campos de contato se necessário
+            const contactFields = document.getElementById('modalContactFields');
+            if (section === 'contact' && contentToEdit.contactData) {
+                contactFields.style.display = 'block';
+                document.getElementById('modalContactAddress').value = contentToEdit.contactData.address;
+                document.getElementById('modalContactPhone').value = contentToEdit.contactData.phone;
+                document.getElementById('modalContactEmail').value = contentToEdit.contactData.email;
             } else {
-                errorMessage.textContent = 'Usuário ou senha incorretos!';
-                errorMessage.style.display = 'block';
+                contactFields.style.display = 'none';
+            }
+            
+            // Armazenar seção atual
+            window.currentEditingSection = section;
+            
+            modal.style.display = 'flex';
+        }
+        
+        function closeContentModal() {
+            document.getElementById('contentModal').style.display = 'none';
+            document.getElementById('contentModalForm').reset();
+            document.getElementById('modalContentImagePreview').style.display = 'none';
+            document.getElementById('modalContactFields').style.display = 'none';
+            window.currentEditingSection = null;
+        }
+        
+        // Funções para processar submits dos modais
+        function handleImageModalSubmit() {
+            const name = document.getElementById('modalImageName').value;
+            const description = document.getElementById('modalImageDescription').value;
+            const imageFile = document.getElementById('modalImageFile').files[0];
+
+            if (!imageFile) {
+                alert('Por favor, escolha uma nova imagem.');
+                return;
+            }
+            
+            // Determinar categoria automaticamente baseada no nome
+            let category = 'gallery'; // padrão
+            if (name.toLowerCase().includes('profile') || name.toLowerCase().includes('logo')) {
+                category = 'logo';
+            } else if (name.toLowerCase().includes('hero') || name.toLowerCase().includes('banner')) {
+                category = 'hero';
+            } else if (name.toLowerCase().includes('about') || name.toLowerCase().includes('sobre')) {
+                category = 'about';
+            } else if (name.toLowerCase().includes('services') || name.toLowerCase().includes('serviços')) {
+                category = 'services';
+            } else if (name.toLowerCase().includes('contact') || name.toLowerCase().includes('contato')) {
+                category = 'contact';
+            }
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const image = {
+                    name,
+                    category,
+                    description,
+                    data: e.target.result
+                };
+                
+                // Verificar se está no modo de substituição
+                if (window.currentReplacingImage) {
+                    console.log(`🔄 Modo de substituição ativo para: ${window.currentReplacingImage}`);
+                    image.isReplacement = true;
+                    image.originalPath = window.currentReplacingImage;
+                }
+                
+                // Usar a função saveImage do script.js
+                if (typeof adminManager !== 'undefined' && adminManager.saveImage) {
+                    adminManager.saveImage(image);
+                } else {
+                    // Fallback se adminManager não estiver disponível
+                    saveImageDirectly(image);
+                }
+                
+                closeImageModal();
+                updateAllPreviews();
+            };
+            reader.readAsDataURL(imageFile);
+        }
+        
+        function handleContentModalSubmit() {
+            const section = window.currentEditingSection;
+            const title = document.getElementById('modalContentTitle').value;
+            const text = document.getElementById('modalContentText').value;
+            const imageFile = document.getElementById('modalContentImage').files[0];
+            
+            if (!section || !title || !text) {
+                alert('Por favor, preencha todos os campos obrigatórios.');
+                return;
+            }
+            
+            const content = {
+                section,
+                title,
+                text
+            };
+            
+            // Processar imagem se fornecida
+            if (imageFile) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    content.image = e.target.result;
+                    processContentSubmit(content);
+                };
+                reader.readAsDataURL(imageFile);
+            } else {
+                processContentSubmit(content);
+            }
+        }
+        
+        function processContentSubmit(content) {
+            // Se for seção de contato, processar dados específicos
+            if (content.section === 'contact') {
+                const contactData = {
+                    address: document.getElementById('modalContactAddress').value,
+                    phone: document.getElementById('modalContactPhone').value,
+                    email: document.getElementById('modalContactEmail').value
+                };
+                content.contactData = contactData;
+            }
+            
+            // Usar a função saveContent do script.js
+            if (typeof adminManager !== 'undefined' && adminManager.saveContent) {
+                adminManager.saveContent(content);
+            } else {
+                // Fallback se adminManager não estiver disponível
+                saveContentDirectly(content);
+            }
+            
+            closeContentModal();
+            updateAllPreviews();
+        }
+        
+        // Funções fallback para salvar diretamente
+        function saveImageDirectly(image) {
+            const images = JSON.parse(localStorage.getItem('images') || '[]');
+            
+            if (image.isReplacement && image.originalPath) {
+                const originalIndex = images.findIndex(img => 
+                    img.name === image.name || 
+                    img.path === image.originalPath ||
+                    img.data === image.originalPath
+                );
+                
+                if (originalIndex !== -1) {
+                    image.id = images[originalIndex].id;
+                    images[originalIndex] = image;
+                    showSuccess('Imagem substituída com sucesso!');
+                } else {
+                    if (!image.id) {
+                        image.id = 'img_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                    }
+                    images.push(image);
+                    showSuccess('Imagem adicionada com sucesso!');
+                }
+            } else {
+                if (!image.id) {
+                    image.id = 'img_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                }
+                images.push(image);
+                showSuccess('Imagem adicionada com sucesso!');
+            }
+            
+            localStorage.setItem('images', JSON.stringify(images));
+        }
+        
+        function saveContentDirectly(content) {
+            const contents = JSON.parse(localStorage.getItem('siteContent') || '[]');
+            const existingIndex = contents.findIndex(item => item.section === content.section);
+            
+            if (existingIndex !== -1) {
+                contents[existingIndex] = content;
+                showSuccess('Conteúdo atualizado com sucesso!');
+            } else {
+                contents.push(content);
+                showSuccess('Conteúdo salvo com sucesso!');
+            }
+            
+            localStorage.setItem('siteContent', JSON.stringify(contents));
+            
+            // Forçar atualização do site principal
+            window.dispatchEvent(new StorageEvent('storage', {
+                key: 'siteContent',
+                newValue: JSON.stringify(contents)
+            }));
+        }
+
+        // Funções auxiliares
+        function switchToForm(tabName) {
+            console.log(`🔄 Executando switchToForm para: ${tabName}`);
+            
+            if (tabName === 'images') {
+                showImageForm();
+            } else if (tabName === 'content') {
+                showContentForm();
+            }
+            
+            // Remove active de todos os itens
+            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            // Adiciona active no item da aba
+            const navItem = document.querySelector(`[data-tab="${tabName}"]`);
+            const tabContent = document.getElementById(tabName);
+            
+            if (navItem && tabContent) {
+                navItem.classList.add('active');
+                tabContent.classList.add('active');
+                
+                // Muda para o formulário se houver toggle
+                const toggleBtns = tabContent.querySelectorAll('.toggle-btn');
+                const formSection = tabContent.querySelector('.form-section');
+                const previewSection = tabContent.querySelector('.preview-section');
+                
+                if (toggleBtns.length > 0 && formSection && previewSection) {
+                    toggleBtns.forEach(b => b.classList.remove('active'));
+                    toggleBtns[0].classList.add('active'); // Primeiro botão (formulário)
+                    formSection.style.display = 'block';
+                    previewSection.style.display = 'none';
+                }
+            }
+        }
+
+        function showSuccess(message) {
+            console.log(`✅ Mostrando notificação: ${message}`);
+            // Criar elemento de notificação
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #28a745;
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                z-index: 10000;
+                font-weight: 500;
+                max-width: 300px;
+                animation: slideIn 0.3s ease;
+            `;
+            notification.textContent = message;
+            
+            // Adicionar animação CSS
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            document.body.appendChild(notification);
+            
+            // Remover após 3 segundos
+            setTimeout(() => {
+                notification.style.animation = 'slideIn 0.3s ease reverse';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // Carregar dados ao inicializar
+        document.addEventListener('DOMContentLoaded', () => {
+            loadExistingData();
+            updateAllPreviews();
+            // Aguardar um pouco para garantir que os elementos foram criados
+            setTimeout(() => {
+                bindPreviewButtons();
+            }, 100);
+            
+            // Event listeners para modais
+            const imageModalForm = document.getElementById('imageModalForm');
+            if (imageModalForm) {
+                imageModalForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    handleImageModalSubmit();
+                });
+            }
+            
+            const contentModalForm = document.getElementById('contentModalForm');
+            if (contentModalForm) {
+                contentModalForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    handleContentModalSubmit();
+                });
+            }
+            
+            // Preview de imagem no modal de substituir
+            const modalImageFile = document.getElementById('modalImageFile');
+            if (modalImageFile) {
+                modalImageFile.addEventListener('change', function() {
+                    const file = this.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            document.getElementById('modalImagePreview').src = e.target.result;
+                            document.getElementById('modalImagePreview').style.display = 'block';
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+            
+            // Preview de imagem no modal de conteúdo
+            const modalContentImage = document.getElementById('modalContentImage');
+            if (modalContentImage) {
+                modalContentImage.addEventListener('change', function() {
+                    const file = this.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            document.getElementById('modalContentImagePreview').src = e.target.result;
+                            document.getElementById('modalContentImagePreview').style.display = 'block';
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+            
+            // Preview de logo nas configurações
+            const siteLogo = document.getElementById('siteLogo');
+            if (siteLogo) {
+                siteLogo.addEventListener('change', function() {
+                    const file = this.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            document.getElementById('siteLogoPreview').src = e.target.result;
+                            document.getElementById('siteLogoPreview').style.display = 'block';
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+            
+            // Preview de imagem nos shows - removido pois já é configurado pelo setupImagePreview
+            
+            // Preview de imagem no cardápio
+            const menuImage = document.getElementById('menuImage');
+            if (menuImage) {
+                menuImage.addEventListener('change', function() {
+                    const file = this.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            document.getElementById('menuImagePreview').src = e.target.result;
+                            document.getElementById('menuImagePreview').style.display = 'block';
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+            
+            // Preview de imagem nas promoções
+            const promotionImage = document.getElementById('promotionImage');
+            if (promotionImage) {
+                promotionImage.addEventListener('change', function() {
+                    const file = this.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            document.getElementById('promotionImagePreview').src = e.target.result;
+                            document.getElementById('promotionImagePreview').style.display = 'block';
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
             }
         });
 
-        function showDashboard() {
-            document.getElementById('loginContainer').style.display = 'none';
-            document.getElementById('adminDashboard').style.display = 'block';
+        // Funções para editar e excluir shows
+        function editShow(showId) {
+            const shows = JSON.parse(localStorage.getItem('shows') || '[]');
+            const show = shows.find(s => (s.id || s.title) === showId);
             
-            // Initialize admin managers
-            new AdminMenuManager();
-            new AdminShowsManager();
+            if (!show) {
+                alert('Show não encontrado!');
+                return;
+            }
+            
+            // Preencher o formulário com os dados do show
+            document.getElementById('showTitle').value = show.title || '';
+            document.getElementById('showDate').value = show.date || '';
+            document.getElementById('showTime').value = show.time || '';
+            document.getElementById('showDescription').value = show.description || '';
+            document.getElementById('showFeatured').checked = show.featured || false;
+            
+            // Se tiver imagem, mostrar preview
+            if (show.image) {
+                document.getElementById('showImagePreview').src = show.image;
+                document.getElementById('showImagePreview').style.display = 'block';
+            }
+            
+            // Armazenar ID do show sendo editado
+            window.editingShowId = showId;
+            
+            // Mostrar mensagem
+            alert('Show carregado para edição. Modifique os campos e clique em "Adicionar Show" para salvar as alterações.');
         }
-
-        function logout() {
-            localStorage.removeItem('parrockAdminLoggedIn');
-            document.getElementById('loginContainer').style.display = 'flex';
-            document.getElementById('adminDashboard').style.display = 'none';
-            document.getElementById('loginForm').reset();
-            document.getElementById('errorMessage').style.display = 'none';
-        }
-
-        // Admin Menu Manager
-        class AdminMenuManager {
-            constructor() {
-                this.menuItems = JSON.parse(localStorage.getItem('parrockMenu')) || [];
-                this.init();
-            }
-
-            init() {
-                this.renderMenu();
-                this.bindEvents();
-            }
-
-            bindEvents() {
-                const form = document.getElementById('adminMenuForm');
-                if (form) {
-                    form.addEventListener('submit', (e) => this.handleSubmit(e));
-                }
-            }
-
-            handleSubmit(e) {
-                e.preventDefault();
-                
-                const name = document.getElementById('adminMenuName').value;
-                const price = document.getElementById('adminMenuPrice').value;
-                const description = document.getElementById('adminMenuDescription').value;
-                const category = document.getElementById('adminMenuCategory').value;
-                const tags = document.getElementById('adminMenuTags').value;
-                const featured = document.getElementById('adminMenuFeatured').checked;
-                const imageFile = document.getElementById('adminMenuImage').files[0];
-
-                const menuItem = {
-                    id: Date.now(),
-                    name,
-                    price,
-                    description,
-                    category,
-                    tags: tags ? tags.split(',').map(tag => tag.trim()) : [],
-                    featured,
-                    image: null
-                };
-
-                if (imageFile) {
-                    const reader = new FileReader();
-                    reader.onload = (event) => {
-                        menuItem.image = event.target.result;
-                        this.addMenuItem(menuItem);
-                    };
-                    reader.readAsDataURL(imageFile);
-                } else {
-                    this.addMenuItem(menuItem);
-                }
-            }
-
-            addMenuItem(item) {
-                this.menuItems.push(item);
-                localStorage.setItem('parrockMenu', JSON.stringify(this.menuItems));
-                this.renderMenu();
-                document.getElementById('adminMenuForm').reset();
-                alert('Item adicionado ao cardápio com sucesso!');
-            }
-
-            deleteMenuItem(id) {
-                if (confirm('Tem certeza que deseja remover este item?')) {
-                    this.menuItems = this.menuItems.filter(item => item.id !== id);
-                    localStorage.setItem('parrockMenu', JSON.stringify(this.menuItems));
-                    this.renderMenu();
-                }
-            }
-
-            renderMenu() {
-                const container = document.getElementById('adminMenuItems');
-                if (!container) return;
-
-                if (this.menuItems.length === 0) {
-                    container.innerHTML = '<p style="color: var(--gray); text-align: center;">Nenhum item no cardápio.</p>';
-                    return;
-                }
-
-                container.innerHTML = this.menuItems.map(item => `
-                    <div class="menu-item" style="background: var(--primary-black); padding: 1rem; border-radius: 10px; margin: 1rem 0; border: 1px solid var(--gold);">
-                        ${item.image ? `<img src="${item.image}" alt="${item.name}" style="width: 100%; height: 150px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;">` : ''}
-                        <h4 style="color: var(--gold); margin-bottom: 0.5rem;">${item.name}</h4>
-                        <p style="color: var(--pink); font-weight: 700; margin-bottom: 0.5rem;">${item.price}</p>
-                        <p style="color: var(--white); margin-bottom: 1rem;">${item.description}</p>
-                        <button onclick="adminMenuManager.deleteMenuItem(${item.id})" class="btn btn-small btn-delete" style="background: var(--pink); color: var(--white); border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer;">Remover</button>
-                    </div>
-                `).join('');
-            }
-        }
-
-        // Admin Shows Manager
-        class AdminShowsManager {
-            constructor() {
-                this.shows = JSON.parse(localStorage.getItem('parrockShows')) || [];
-                this.init();
-            }
-
-            init() {
-                this.renderShows();
-                this.bindEvents();
-            }
-
-            bindEvents() {
-                const form = document.getElementById('adminShowsForm');
-                if (form) {
-                    form.addEventListener('submit', (e) => this.handleSubmit(e));
-                }
-            }
-
-            handleSubmit(e) {
-                e.preventDefault();
-                
-                const name = document.getElementById('adminShowName').value;
-                const date = document.getElementById('adminShowDate').value;
-                const time = document.getElementById('adminShowTime').value;
-                const price = document.getElementById('adminShowPrice').value;
-                const description = document.getElementById('adminShowDescription').value;
-                const featured = document.getElementById('adminShowFeatured').checked;
-                const imageFile = document.getElementById('adminShowImage').files[0];
-
-                const show = {
-                    id: Date.now(),
-                    name,
-                    date,
-                    time,
-                    price: price || 'Entrada gratuita',
-                    description,
-                    featured,
-                    image: null
-                };
-
-                if (imageFile) {
-                    const reader = new FileReader();
-                    reader.onload = (event) => {
-                        show.image = event.target.result;
-                        this.addShow(show);
-                    };
-                    reader.readAsDataURL(imageFile);
-                } else {
-                    this.addShow(show);
-                }
-            }
-
-            addShow(show) {
-                this.shows.push(show);
-                localStorage.setItem('parrockShows', JSON.stringify(this.shows));
-                this.renderShows();
-                document.getElementById('adminShowsForm').reset();
-                alert('Show adicionado à agenda com sucesso!');
-            }
-
-            deleteShow(id) {
-                if (confirm('Tem certeza que deseja remover este show?')) {
-                    this.shows = this.shows.filter(show => show.id !== id);
-                    localStorage.setItem('parrockShows', JSON.stringify(this.shows));
-                    this.renderShows();
-                }
-            }
-
-            renderShows() {
-                const container = document.getElementById('adminShowsList');
-                if (!container) return;
-
-                if (this.shows.length === 0) {
-                    container.innerHTML = '<p style="color: var(--gray); text-align: center;">Nenhum show agendado.</p>';
-                    return;
-                }
-
-                const sortedShows = this.shows.sort((a, b) => new Date(a.date) - new Date(b.date));
-
-                container.innerHTML = sortedShows.map(show => `
-                    <div class="show-item" style="background: var(--primary-black); padding: 1rem; border-radius: 10px; margin: 1rem 0; border: 1px solid var(--gold);">
-                        ${show.image ? `<img src="${show.image}" alt="${show.name}" style="width: 100%; height: 150px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;">` : ''}
-                        <h4 style="color: var(--gold); margin-bottom: 0.5rem;">${show.name}</h4>
-                        <p style="color: var(--pink); font-weight: 700; margin-bottom: 0.5rem;">${this.formatDate(show.date)} - ${show.time}</p>
-                        <p style="color: var(--yellow); font-weight: 700; margin-bottom: 0.5rem;">${show.price}</p>
-                        <p style="color: var(--white); margin-bottom: 1rem;">${show.description}</p>
-                        <button onclick="adminShowsManager.deleteShow(${show.id})" class="btn btn-small btn-delete" style="background: var(--pink); color: var(--white); border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer;">Remover</button>
-                    </div>
-                `).join('');
-            }
-
-            formatDate(dateString) {
-                const date = new Date(dateString);
-                return date.toLocaleDateString('pt-BR', {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: 'numeric'
-                });
-            }
-        }
-
-        // Make managers globally available
-        let adminMenuManager, adminShowsManager;
         
-        // Admin Promotions Manager
-        class AdminPromotionsManager {
-            constructor() {
-                this.promotions = JSON.parse(localStorage.getItem('parrockPromotions')) || [];
-                this.init();
-            }
+        // Variáveis globais para o modal de confirmação
+        let pendingDeleteAction = null;
+        let pendingDeleteItem = null;
 
-            init() {
-                this.renderPromotions();
-                this.bindEvents();
+        function deleteShow(showId) {
+            const shows = JSON.parse(localStorage.getItem('shows') || '[]');
+            const show = shows.find(s => (s.id || s.title) === showId);
+            
+            if (!show) {
+                alert('Show não encontrado!');
+                return;
             }
-
-            bindEvents() {
-                const form = document.getElementById('adminPromotionsForm');
-                if (form) {
-                    form.addEventListener('submit', (e) => this.handleSubmit(e));
-                }
-            }
-
-            handleSubmit(e) {
-                e.preventDefault();
+            
+            // Configurar ação de exclusão
+            pendingDeleteAction = () => {
+                const filteredShows = shows.filter(s => (s.id || s.title) !== showId);
+                localStorage.setItem('shows', JSON.stringify(filteredShows));
                 
-                const name = document.getElementById('adminPromoName').value;
-                const price = document.getElementById('adminPromoPrice').value;
-                const description = document.getElementById('adminPromoDescription').value;
-                const validity = document.getElementById('adminPromoValidity').value;
-                const badge = document.getElementById('adminPromoBadge').value;
-                const featured = document.getElementById('adminPromoFeatured').checked;
-                const imageFile = document.getElementById('adminPromoImage').files[0];
+                // Atualizar preview
+                updateShowsPreview();
+                updateStats();
+                
+                alert('Show excluído com sucesso!');
+            };
+            
+            pendingDeleteItem = show.title;
+            
+            // Mostrar modal de confirmação
+            showConfirmModal(`Tem certeza que deseja excluir o show "${show.title}"?`);
+        }
+        
 
-                const promotion = {
-                    id: Date.now(),
-                    name,
-                    price,
-                    description,
-                    validity,
-                    badge,
-                    featured,
-                    image: null
-                };
+        // Funções do modal de confirmação
+        function showConfirmModal(message) {
+            document.getElementById('confirmMessage').textContent = message;
+            document.getElementById('confirmModal').style.display = 'flex';
+        }
 
-                if (imageFile) {
-                    const reader = new FileReader();
-                    reader.onload = (event) => {
-                        promotion.image = event.target.result;
-                        this.addPromotion(promotion);
-                    };
-                    reader.readAsDataURL(imageFile);
-                } else {
-                    this.addPromotion(promotion);
-                }
-            }
+        function closeConfirmModal() {
+            document.getElementById('confirmModal').style.display = 'none';
+            pendingDeleteAction = null;
+            pendingDeleteItem = null;
+        }
 
-            addPromotion(promo) {
-                this.promotions.push(promo);
-                localStorage.setItem('parrockPromotions', JSON.stringify(this.promotions));
-                this.renderPromotions();
-                document.getElementById('adminPromotionsForm').reset();
-                alert('Promoção adicionada com sucesso!');
-            }
-
-            deletePromotion(id) {
-                if (confirm('Tem certeza que deseja remover esta promoção?')) {
-                    this.promotions = this.promotions.filter(promo => promo.id !== id);
-                    localStorage.setItem('parrockPromotions', JSON.stringify(this.promotions));
-                    this.renderPromotions();
-                }
-            }
-
-            renderPromotions() {
-                const container = document.getElementById('adminPromotionsList');
-                if (!container) return;
-
-                if (this.promotions.length === 0) {
-                    container.innerHTML = '<p style="color: var(--gray); text-align: center;">Nenhuma promoção cadastrada.</p>';
-                    return;
-                }
-
-                container.innerHTML = this.promotions.map(promo => `
-                    <div class="promotion-item" style="background: var(--primary-black); padding: 1rem; border-radius: 10px; margin: 1rem 0; border: 1px solid var(--gold);">
-                        ${promo.image ? `<img src="${promo.image}" alt="${promo.name}" style="width: 100%; height: 150px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;">` : ''}
-                        <h4 style="color: var(--gold); margin-bottom: 0.5rem;">${promo.name}</h4>
-                        <p style="color: var(--pink); font-weight: 700; margin-bottom: 0.5rem;">${promo.price}</p>
-                        <p style="color: var(--white); margin-bottom: 0.5rem;">${promo.description}</p>
-                        <p style="color: var(--gray); margin-bottom: 0.5rem;">Válido até: ${this.formatDate(promo.validity)}</p>
-                        ${promo.featured ? '<span style="background: var(--pink); color: var(--white); padding: 2px 8px; border-radius: 10px; font-size: 0.8rem;">DESTAQUE</span>' : ''}
-                        <button onclick="adminPromotionsManager.deletePromotion(${promo.id})" class="btn btn-small btn-delete" style="background: var(--pink); color: var(--white); border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; margin-top: 1rem;">Remover</button>
-                    </div>
-                `).join('');
-            }
-
-            formatDate(dateString) {
-                const date = new Date(dateString);
-                return date.toLocaleDateString('pt-BR', {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: 'numeric'
-                });
+        function executeDelete() {
+            if (pendingDeleteAction) {
+                pendingDeleteAction();
+                closeConfirmModal();
             }
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            if (localStorage.getItem('parrockAdminLoggedIn') === 'true') {
-                adminPromotionsManager = new AdminPromotionsManager();
-                adminMenuManager = new AdminMenuManager();
-                adminShowsManager = new AdminShowsManager();
+        // Fechar modal ao clicar fora dele
+        document.getElementById('confirmModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeConfirmModal();
             }
+        });
+
+        // Ajustar campos de data para UTC-4
+        document.addEventListener('DOMContentLoaded', function() {
+            const dateInputs = document.querySelectorAll('input[type="date"]');
+            
+            dateInputs.forEach(input => {
+                // Definir o fuso horário para UTC-4
+                input.addEventListener('change', function() {
+                    if (this.value) {
+                        const date = new Date(this.value + 'T00:00:00');
+                        const utc4Date = new Date(date.getTime() - (4 * 60 * 60 * 1000));
+                        this.value = utc4Date.toISOString().split('T')[0];
+                    }
+                });
+            });
         });
     </script>
 </body>

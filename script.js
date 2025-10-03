@@ -2,25 +2,29 @@
 const hamburger = document.querySelector('.hamburger');
 const navMenu = document.querySelector('.nav-menu');
 
-hamburger.addEventListener('click', () => {
-    hamburger.classList.toggle('active');
-    navMenu.classList.toggle('active');
-});
-
-// Close mobile menu when clicking on a link
-document.querySelectorAll('.nav-menu a').forEach(link => {
-    link.addEventListener('click', () => {
-        hamburger.classList.remove('active');
-        navMenu.classList.remove('active');
+if (hamburger && navMenu) {
+    hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('active');
+        navMenu.classList.toggle('active');
     });
-});
+
+    // Close mobile menu when clicking on a link
+    document.querySelectorAll('.nav-menu a').forEach(link => {
+        link.addEventListener('click', () => {
+            hamburger.classList.remove('active');
+            navMenu.classList.remove('active');
+        });
+    });
+}
 
 // Smooth scrolling for navigation links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
+        const href = this.getAttribute('href');
+        if (href && href !== '#') {
+            const target = document.querySelector(href);
+            if (target) {
             const headerHeight = 80; // Height of fixed header
             let targetPosition = target.offsetTop - headerHeight;
             
@@ -33,6 +37,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 top: targetPosition,
                 behavior: 'smooth'
             });
+            }
         }
     });
 });
@@ -40,10 +45,12 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 // Header background on scroll
 window.addEventListener('scroll', () => {
     const header = document.querySelector('.header');
-    if (window.scrollY > 100) {
-        header.style.background = 'rgba(26, 26, 26, 0.98)';
-    } else {
-        header.style.background = 'rgba(26, 26, 26, 0.95)';
+    if (header) {
+        if (window.scrollY > 100) {
+            header.style.background = 'rgba(26, 26, 26, 0.98)';
+        } else {
+            header.style.background = 'rgba(26, 26, 26, 0.95)';
+        }
     }
 });
 
@@ -268,11 +275,14 @@ class PromotionsManager {
     }
 
     formatDate(dateString) {
+        // Ajustar para UTC-4 (Brasil)
         const date = new Date(dateString);
-        return date.toLocaleDateString('pt-BR', {
+        const utc4Date = new Date(date.getTime() - (4 * 60 * 60 * 1000));
+        return utc4Date.toLocaleDateString('pt-BR', {
             day: '2-digit',
             month: '2-digit',
-            year: 'numeric'
+            year: 'numeric',
+            timeZone: 'America/Sao_Paulo'
         });
     }
 }
@@ -377,13 +387,18 @@ class MenuManager {
 // Shows Management
 class ShowsManager {
     constructor() {
-        this.shows = JSON.parse(localStorage.getItem('parrockShows')) || [];
+        this.shows = JSON.parse(localStorage.getItem('shows')) || [];
         this.init();
     }
 
     init() {
         this.renderShows();
         this.bindEvents();
+        
+        // Listener para redimensionamento da janela
+        window.addEventListener('resize', () => {
+            this.renderShows();
+        });
     }
 
     bindEvents() {
@@ -393,21 +408,21 @@ class ShowsManager {
     handleShowSubmit(e) {
         e.preventDefault();
         
-        const name = document.getElementById('showName').value;
+        const title = document.getElementById('showTitle').value;
         const date = document.getElementById('showDate').value;
         const time = document.getElementById('showTime').value;
         const price = document.getElementById('showPrice').value;
         const description = document.getElementById('showDescription').value;
         const imageFile = document.getElementById('showImage').files[0];
 
-        if (!name || !date || !time || !description) {
+        if (!title || !date || !time || !description) {
             alert('Por favor, preencha todos os campos obrigatórios.');
             return;
         }
 
         const show = {
             id: Date.now(),
-            name,
+            title,
             date,
             time,
             price: price || 'Entrada gratuita',
@@ -444,7 +459,7 @@ class ShowsManager {
     }
 
     saveShows() {
-        localStorage.setItem('parrockShows', JSON.stringify(this.shows));
+        localStorage.setItem('shows', JSON.stringify(this.shows));
     }
 
     renderShows() {
@@ -466,29 +481,133 @@ class ShowsManager {
             `;
             return;
         }
+        
+        // Verificar se deve usar carrossel (mais de 3 cards em desktop)
+        const shouldUseCarousel = featuredShows.length > 3 && window.innerWidth > 768;
+        
+        if (shouldUseCarousel) {
+            this.renderCarousel(container, featuredShows);
+        } else {
+            this.renderGrid(container, featuredShows);
+        }
+    }
 
-        container.innerHTML = featuredShows.map(show => `
-            <div class="show-item" style="min-width: 300px;">
-                ${show.image ? `<img src="${show.image}" alt="${show.name}" class="show-item-img">` : ''}
-                <div class="show-item-content">
-                    <div class="show-item-header">
-                        <h3 class="show-item-name">${show.name}</h3>
-                        <p class="show-item-date">${this.formatDate(show.date)}</p>
-                        <p class="show-item-time">${show.time}</p>
-                        <p class="show-item-price">${show.price}</p>
+    renderCarousel(container, shows) {
+        container.className = 'shows-carousel';
+        container.innerHTML = `
+            <div class="carousel-container">
+                <button class="carousel-btn carousel-btn-prev" onclick="showsManager.prevSlide()">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <div class="carousel-track">
+                    ${shows.map((show, index) => `
+                        <div class="carousel-slide ${index === 0 ? 'active' : ''}">
+                            <div class="show-gallery-item">
+                                ${show.image ? `<img src="${show.image}" alt="${show.title}" class="show-gallery-img">` : ''}
+                                <div class="show-gallery-content">
+                                    <h3 class="show-gallery-title">${show.title}</h3>
+                                    <div class="show-gallery-meta">
+                                        <p class="show-gallery-date">📅 ${this.formatDate(show.date)}</p>
+                                        <p class="show-gallery-time">🕐 ${show.time}</p>
+                                    </div>
+                                    <p class="show-gallery-description">${show.description}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+                <button class="carousel-btn carousel-btn-next" onclick="showsManager.nextSlide()">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+            <div class="carousel-dots">
+                ${Array.from({length: Math.max(1, shows.length - 2)}, (_, index) => `
+                    <button class="carousel-dot ${index === 0 ? 'active' : ''}" onclick="showsManager.goToSlide(${index})"></button>
+                `).join('')}
+            </div>
+        `;
+        
+        this.currentSlide = 0;
+        this.totalSlides = shows.length;
+    }
+
+    renderGrid(container, shows) {
+        container.className = 'gallery-grid';
+        container.innerHTML = shows.map(show => `
+            <div class="show-gallery-item">
+                ${show.image ? `<img src="${show.image}" alt="${show.title}" class="show-gallery-img">` : ''}
+                <div class="show-gallery-content">
+                    <h3 class="show-gallery-title">${show.title}</h3>
+                    <div class="show-gallery-meta">
+                        <p class="show-gallery-date">📅 ${this.formatDate(show.date)}</p>
+                        <p class="show-gallery-time">🕐 ${show.time}</p>
                     </div>
-                    <p class="show-item-description">${show.description}</p>
+                    <p class="show-gallery-description">${show.description}</p>
                 </div>
             </div>
         `).join('');
     }
 
+    // Métodos do carrossel
+    nextSlide() {
+        const maxSlide = Math.max(0, this.totalSlides - 3);
+        if (this.currentSlide < maxSlide) {
+            this.currentSlide++;
+        } else {
+            this.currentSlide = 0;
+        }
+        this.updateCarousel();
+    }
+
+    prevSlide() {
+        const maxSlide = Math.max(0, this.totalSlides - 3);
+        if (this.currentSlide > 0) {
+            this.currentSlide--;
+        } else {
+            this.currentSlide = maxSlide;
+        }
+        this.updateCarousel();
+    }
+
+    goToSlide(index) {
+        this.currentSlide = index;
+        this.updateCarousel();
+    }
+
+    updateCarousel() {
+        const slides = document.querySelectorAll('.carousel-slide');
+        const dots = document.querySelectorAll('.carousel-dot');
+        
+        // Mostrar apenas 3 slides ativos por vez
+        slides.forEach((slide, index) => {
+            const isActive = index >= this.currentSlide && index < this.currentSlide + 3;
+            slide.classList.toggle('active', isActive);
+        });
+        
+        // Atualizar dots baseado no slide atual
+        dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === this.currentSlide);
+        });
+        
+        // Garantir que apenas 3 slides sejam visíveis
+        const activeSlides = document.querySelectorAll('.carousel-slide.active');
+        if (activeSlides.length > 3) {
+            // Se mais de 3 slides estão ativos, desativar os extras
+            for (let i = 3; i < activeSlides.length; i++) {
+                activeSlides[i].classList.remove('active');
+            }
+        }
+    }
+
     formatDate(dateString) {
+        // Ajustar para UTC-4 (Brasil)
         const date = new Date(dateString);
-        return date.toLocaleDateString('pt-BR', {
+        const utc4Date = new Date(date.getTime() - (4 * 60 * 60 * 1000));
+        return utc4Date.toLocaleDateString('pt-BR', {
             day: '2-digit',
             month: '2-digit',
-            year: 'numeric'
+            year: 'numeric',
+            timeZone: 'America/Sao_Paulo'
         });
     }
 
@@ -497,11 +616,514 @@ class ShowsManager {
     }
 }
 
+// Enhanced Admin Manager for robust panel
+class EnhancedAdminManager {
+    constructor() {
+        this.init();
+    }
+
+    init() {
+        this.bindFormEvents();
+        this.loadSettings();
+    }
+
+    bindFormEvents() {
+        // Show form
+        const showForm = document.getElementById('showForm');
+        if (showForm) {
+            showForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.handleShowSubmit();
+            });
+        }
+
+        // Menu form
+        const menuForm = document.getElementById('menuForm');
+        if (menuForm) {
+            menuForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.handleMenuSubmit();
+            });
+        }
+
+        // Promotion form
+        const promotionForm = document.getElementById('promotionForm');
+        if (promotionForm) {
+            promotionForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.handlePromotionSubmit();
+            });
+        }
+
+        // Image form
+        const imageForm = document.getElementById('imageForm');
+        if (imageForm) {
+            imageForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.handleImageSubmit();
+            });
+        }
+
+        // Content form
+        const contentForm = document.getElementById('contentForm');
+        if (contentForm) {
+            contentForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.handleContentSubmit();
+            });
+        }
+
+        // Settings form
+        const settingsForm = document.getElementById('settingsForm');
+        if (settingsForm) {
+            settingsForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.handleSettingsSubmit();
+            });
+        }
+    }
+
+    handleShowSubmit() {
+        const title = document.getElementById('showTitle').value;
+        const date = document.getElementById('showDate').value;
+        const time = document.getElementById('showTime').value;
+        const description = document.getElementById('showDescription').value;
+        const featured = document.getElementById('showFeatured').checked;
+        const imageFile = document.getElementById('showImage').files[0];
+
+        if (!title || !date || !time || !description) {
+            alert('Por favor, preencha todos os campos obrigatórios.');
+            return;
+        }
+
+        const show = {
+            id: Date.now().toString(), // Gerar ID único
+            title,
+            date,
+            time,
+            description,
+            featured,
+            image: null
+        };
+
+        if (imageFile) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                show.image = e.target.result;
+                this.saveShow(show);
+            };
+            reader.readAsDataURL(imageFile);
+        } else {
+            this.saveShow(show);
+        }
+    }
+
+    handleMenuSubmit() {
+        const name = document.getElementById('menuName').value;
+        const category = document.getElementById('menuCategory').value;
+        const description = document.getElementById('menuDescription').value;
+        const price = parseFloat(document.getElementById('menuPrice').value);
+        const featured = document.getElementById('menuFeatured').checked;
+        const imageFile = document.getElementById('menuImage').files[0];
+
+        if (!name || !category || !description || isNaN(price)) {
+            alert('Por favor, preencha todos os campos obrigatórios.');
+            return;
+        }
+
+        const menuItem = {
+            name,
+            category,
+            description,
+            price,
+            featured,
+            image: null
+        };
+
+        if (imageFile) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                menuItem.image = e.target.result;
+                this.saveMenuItem(menuItem);
+            };
+            reader.readAsDataURL(imageFile);
+        } else {
+            this.saveMenuItem(menuItem);
+        }
+    }
+
+    handlePromotionSubmit() {
+        const title = document.getElementById('promotionTitle').value;
+        const description = document.getElementById('promotionDescription').value;
+        const validUntil = document.getElementById('promotionValidUntil').value;
+        const featured = document.getElementById('promotionFeatured').checked;
+        const imageFile = document.getElementById('promotionImage').files[0];
+
+        if (!title || !description || !validUntil) {
+            alert('Por favor, preencha todos os campos obrigatórios.');
+            return;
+        }
+
+        const promotion = {
+            title,
+            description,
+            validUntil,
+            featured,
+            image: null
+        };
+
+        if (imageFile) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                promotion.image = e.target.result;
+                this.savePromotion(promotion);
+            };
+            reader.readAsDataURL(imageFile);
+        } else {
+            this.savePromotion(promotion);
+        }
+    }
+
+    handleImageSubmit() {
+        const name = document.getElementById('imageName').value;
+        const description = document.getElementById('imageDescription').value;
+        const imageFile = document.getElementById('imageFile').files[0];
+
+        if (!name || !imageFile) {
+            alert('Por favor, preencha todos os campos obrigatórios.');
+            return;
+        }
+        
+        // Determinar categoria automaticamente baseada no nome
+        let category = 'gallery'; // padrão
+        if (name.toLowerCase().includes('profile') || name.toLowerCase().includes('logo')) {
+            category = 'logo';
+        } else if (name.toLowerCase().includes('hero') || name.toLowerCase().includes('banner')) {
+            category = 'hero';
+        } else if (name.toLowerCase().includes('about') || name.toLowerCase().includes('sobre')) {
+            category = 'about';
+        } else if (name.toLowerCase().includes('services') || name.toLowerCase().includes('serviços')) {
+            category = 'services';
+        } else if (name.toLowerCase().includes('contact') || name.toLowerCase().includes('contato')) {
+            category = 'contact';
+        }
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const image = {
+                name,
+                category,
+                description,
+                data: e.target.result
+            };
+            
+            // Verificar se está no modo de substituição
+            if (window.currentReplacingImage) {
+                console.log(`🔄 Modo de substituição ativo para: ${window.currentReplacingImage}`);
+                // Adicionar flag para indicar que é uma substituição
+                image.isReplacement = true;
+                image.originalPath = window.currentReplacingImage;
+            }
+            
+            this.saveImage(image);
+            
+            // Limpar a referência de substituição
+            window.currentReplacingImage = null;
+        };
+        reader.readAsDataURL(imageFile);
+    }
+
+    handleContentSubmit() {
+        const section = document.getElementById('contentSection').value;
+        const title = document.getElementById('contentTitle').value;
+        const text = document.getElementById('contentText').value;
+        const imageFile = document.getElementById('contentImage').files[0];
+
+        if (!section || !title || !text) {
+            alert('Por favor, preencha todos os campos obrigatórios.');
+            return;
+        }
+
+        const content = {
+            section,
+            title,
+            text,
+            image: null
+        };
+
+        if (imageFile) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                content.image = e.target.result;
+                this.saveContent(content);
+            };
+            reader.readAsDataURL(imageFile);
+        } else {
+            this.saveContent(content);
+        }
+    }
+
+    handleSettingsSubmit() {
+        const title = document.getElementById('siteTitle').value;
+        const description = document.getElementById('siteDescription').value;
+        const primaryColor = document.getElementById('primaryColor').value;
+        const secondaryColor = document.getElementById('secondaryColor').value;
+        const logoFile = document.getElementById('siteLogo').files[0];
+
+        const settings = {
+            title,
+            description,
+            primaryColor,
+            secondaryColor,
+            logo: null
+        };
+
+        if (logoFile) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                settings.logo = e.target.result;
+                this.saveSettings(settings);
+            };
+            reader.readAsDataURL(logoFile);
+        } else {
+            this.saveSettings(settings);
+        }
+    }
+
+    saveShow(show) {
+        const shows = JSON.parse(localStorage.getItem('shows') || '[]');
+        
+        // Verificar se está editando um show existente
+        if (window.editingShowId) {
+            const index = shows.findIndex(s => (s.id || s.title) === window.editingShowId);
+            if (index !== -1) {
+                shows[index] = show;
+                this.showSuccess('Show atualizado com sucesso!');
+            } else {
+                shows.push(show);
+                this.showSuccess('Show adicionado com sucesso!');
+            }
+            // Limpar ID de edição
+            window.editingShowId = null;
+        } else {
+            shows.push(show);
+            this.showSuccess('Show adicionado com sucesso!');
+        }
+        
+        localStorage.setItem('shows', JSON.stringify(shows));
+        this.clearForm('showForm');
+        if (typeof loadShows === 'function') loadShows();
+        if (typeof updateStats === 'function') updateStats();
+        if (typeof refreshPreviews === 'function') refreshPreviews();
+    }
+
+    saveMenuItem(menuItem) {
+        const menuItems = JSON.parse(localStorage.getItem('menuItems') || '[]');
+        menuItems.push(menuItem);
+        localStorage.setItem('menuItems', JSON.stringify(menuItems));
+        this.clearForm('menuForm');
+        this.showSuccess('Item do cardápio adicionado com sucesso!');
+        if (typeof loadMenuItems === 'function') loadMenuItems();
+        if (typeof updateStats === 'function') updateStats();
+        if (typeof refreshPreviews === 'function') refreshPreviews();
+    }
+
+    savePromotion(promotion) {
+        const promotions = JSON.parse(localStorage.getItem('promotions') || '[]');
+        promotions.push(promotion);
+        localStorage.setItem('promotions', JSON.stringify(promotions));
+        this.clearForm('promotionForm');
+        this.showSuccess('Promoção adicionada com sucesso!');
+        if (typeof loadPromotions === 'function') loadPromotions();
+        if (typeof updateStats === 'function') updateStats();
+        if (typeof refreshPreviews === 'function') refreshPreviews();
+    }
+
+    saveImage(image) {
+        const images = JSON.parse(localStorage.getItem('images') || '[]');
+        
+        // Se for uma substituição, procurar pela imagem original
+        if (image.isReplacement && image.originalPath) {
+            console.log(`🔄 Procurando imagem original: ${image.originalPath}`);
+            
+            // Procurar por imagem com o mesmo nome ou caminho
+            const originalIndex = images.findIndex(img => 
+                img.name === image.name || 
+                img.path === image.originalPath ||
+                img.data === image.originalPath
+            );
+            
+            if (originalIndex !== -1) {
+                // Substituir imagem existente
+                image.id = images[originalIndex].id; // Manter o mesmo ID
+                images[originalIndex] = image;
+                this.showSuccess('Imagem substituída com sucesso!');
+                console.log(`✅ Imagem substituída no índice: ${originalIndex}`);
+            } else {
+                // Se não encontrar, adicionar como nova
+                if (!image.id) {
+                    image.id = 'img_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                }
+                images.push(image);
+                this.showSuccess('Imagem adicionada com sucesso!');
+                console.log(`➕ Imagem adicionada como nova (original não encontrada)`);
+            }
+        } else {
+            // Lógica normal para novas imagens
+            if (!image.id) {
+                image.id = 'img_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            }
+            
+            const existingIndex = images.findIndex(img => img.id === image.id);
+            
+            if (existingIndex !== -1) {
+                images[existingIndex] = image;
+                this.showSuccess('Imagem atualizada com sucesso!');
+            } else {
+                images.push(image);
+                this.showSuccess('Imagem adicionada com sucesso!');
+            }
+        }
+        
+        localStorage.setItem('images', JSON.stringify(images));
+        this.clearForm('imageForm');
+        if (typeof loadImages === 'function') loadImages();
+        if (typeof updateStats === 'function') updateStats();
+        if (typeof refreshPreviews === 'function') refreshPreviews();
+        
+        // Voltar ao preview após salvar
+        if (typeof showImagePreview === 'function') showImagePreview();
+    }
+
+    saveContent(content) {
+        const contents = JSON.parse(localStorage.getItem('siteContent') || '[]');
+        
+        // Se for seção de contato, processar dados específicos
+        if (content.section === 'contact') {
+            const contactData = {
+                address: document.getElementById('contactAddress') ? document.getElementById('contactAddress').value : '',
+                phone: document.getElementById('contactPhone') ? document.getElementById('contactPhone').value : '',
+                email: document.getElementById('contactEmail') ? document.getElementById('contactEmail').value : ''
+            };
+            content.contactData = contactData;
+        }
+        
+        // Verificar se já existe conteúdo para esta seção
+        const existingIndex = contents.findIndex(item => item.section === content.section);
+        
+        if (existingIndex !== -1) {
+            // Atualizar conteúdo existente
+            contents[existingIndex] = content;
+            this.showSuccess('Conteúdo atualizado com sucesso!');
+        } else {
+            // Adicionar novo conteúdo
+            contents.push(content);
+            this.showSuccess('Conteúdo salvo com sucesso!');
+        }
+        
+        localStorage.setItem('siteContent', JSON.stringify(contents));
+        this.clearForm('contentForm');
+        if (typeof loadContent === 'function') loadContent();
+        if (typeof refreshPreviews === 'function') refreshPreviews();
+        
+        // Voltar ao preview após salvar
+        if (typeof showContentPreview === 'function') showContentPreview();
+        
+        // Forçar atualização do site principal
+        window.dispatchEvent(new StorageEvent('storage', {
+            key: 'siteContent',
+            newValue: JSON.stringify(contents)
+        }));
+    }
+
+    saveSettings(settings) {
+        localStorage.setItem('siteSettings', JSON.stringify(settings));
+        this.showSuccess('Configurações salvas com sucesso!');
+        this.applySettings(settings);
+    }
+
+    clearForm(formId) {
+        const form = document.getElementById(formId);
+        if (form) {
+            form.reset();
+            // Clear image previews
+            const previews = form.querySelectorAll('.image-preview');
+            previews.forEach(preview => {
+                preview.style.display = 'none';
+                preview.src = '';
+            });
+        }
+    }
+
+    showSuccess(message) {
+        // Create a temporary success message
+        const successDiv = document.createElement('div');
+        successDiv.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 5px;
+            z-index: 10000;
+            font-weight: 600;
+        `;
+        successDiv.textContent = message;
+        document.body.appendChild(successDiv);
+
+        setTimeout(() => {
+            document.body.removeChild(successDiv);
+        }, 3000);
+    }
+
+    loadSettings() {
+        const settings = JSON.parse(localStorage.getItem('siteSettings') || '{}');
+        if (settings.title) {
+            document.getElementById('siteTitle').value = settings.title;
+        }
+        if (settings.description) {
+            document.getElementById('siteDescription').value = settings.description;
+        }
+        if (settings.primaryColor) {
+            document.getElementById('primaryColor').value = settings.primaryColor;
+        }
+        if (settings.secondaryColor) {
+            document.getElementById('secondaryColor').value = settings.secondaryColor;
+        }
+        if (settings.logo) {
+            document.getElementById('siteLogoPreview').src = settings.logo;
+            document.getElementById('siteLogoPreview').style.display = 'block';
+        }
+    }
+
+    applySettings(settings) {
+        // Apply settings to the main site
+        if (settings.primaryColor) {
+            document.documentElement.style.setProperty('--primary-color', settings.primaryColor);
+        }
+        if (settings.secondaryColor) {
+            document.documentElement.style.setProperty('--secondary-color', settings.secondaryColor);
+        }
+        if (settings.logo) {
+            const logos = document.querySelectorAll('.header-logo img');
+            logos.forEach(logo => {
+                logo.src = settings.logo;
+            });
+        }
+    }
+}
+
 // Initialize managers when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     window.promotionsManager = new PromotionsManager();
     window.menuManager = new MenuManager();
     window.showsManager = new ShowsManager();
+    
+    // Initialize enhanced admin manager if on admin page
+    if (document.getElementById('showForm')) {
+        window.enhancedAdminManager = new EnhancedAdminManager();
+    }
 });
 
 // Add keyboard navigation support
